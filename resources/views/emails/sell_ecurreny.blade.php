@@ -35,7 +35,7 @@
 	@if($wallet_id == null)
 		<b>Account No: </b> <em>{{ $pm_account_no }}</em>
 	@else
-		<b>Our Wallet ID: </b> <em>{{ $wallet_id }}</em>
+		<b>Our Wallet Address: </b> <em>{{ $wallet_id }}</em>
 	@endif
 
 	<p>Please note that we will not be responsible for funding a wrong account provided by you and always ensure your computer is secure.</p>

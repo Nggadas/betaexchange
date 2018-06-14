@@ -20,7 +20,7 @@
             <input type="text" name="ref_no" value="{!! $buy_details->ref_no !!}" class="form-control input-lg" readonly="true" >
                   </div>      
                  <div class="form-group">
-                    <label for="wallet_id">Wallet ID:</label>
+                    <label for="wallet_id">Wallet Address:</label>
             <input type="text" name="wallet_id" value="{!! $buy_details->wallet_id !!}" class="form-control input-lg" readonly="true" >
                 </div>
              <div class="form-group">

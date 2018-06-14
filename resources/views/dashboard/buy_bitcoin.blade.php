@@ -67,17 +67,17 @@
                                 </div>
                                 <div class="tab-pane fade" id="wizardContent2">
                                     <div class="form-group">
-                                        <label class="control-label col-lg-2">Wallet Id</label>
+                                        <label class="control-label col-lg-2">Wallet address</label>
                                         <div class="col-lg-6">
-                {!! Form::text('wallet', Input::old('wallet'),['class' => 'form-control input-lg','required' => "true",'placeholder' => "Enter your Wallet Id",
+                {!! Form::text('wallet', Input::old('wallet'),['class' => 'form-control input-lg','required' => "true",'placeholder' => "Enter your Wallet Address",
                  'data-required'=>"true", 'pattern'=>".{26,}", 'maxLength'=>"35", 'id'=>"wallet"]) !!}
                                         </div><!-- /.col -->
                                     </div><!-- /form-group -->      
                                     <div class="form-group">
-                            <label class="control-label col-lg-2">Confirm Wallet Id</label>
+                            <label class="control-label col-lg-2">Confirm Wallet Address</label>
                             <div class="col-lg-6">
 
-            {!! Form::text('confirm_wallet', Input::old('confirm_wallet'),['class' => 'form-control input-lg','required' => "true",'placeholder' => "Confirm Wallet Id",
+            {!! Form::text('confirm_wallet', Input::old('confirm_wallet'),['class' => 'form-control input-lg','required' => "true",'placeholder' => "Confirm Wallet Address",
                  'data-required'=>"true",'id'=>"confirm_wallet",'data-equalto'=>"#wallet"]) !!}
                             
                             </div>
@@ -124,27 +124,19 @@
                                                     'data-required'=>"true",'id'=>"last_name"]) !!}
                                             </div><!-- /.col -->
                                         </div>
-                                            
-                                        <div class="form-group">
-                                            <label class="control-label col-md-2">Account Name: </label>
-                                            <div class="col-lg-4">
-                                                    {!! Form::text('account_name', Input::old('account_name'),['class' => 'form-control','required' => "true",'placeholder' => "e.g. John Doe",
-                                                    'data-required'=>"true",'id'=>"account_name"]) !!}
-                                            </div><!-- /.col -->
-                                        </div>
 
                                         <div class="form-group">
                                             <label class="control-label col-lg-2">Account Number: </label>
                                             <div class="col-lg-4">
-                                                {!! Form::number('acct_no', Input::old('acct_no'),['class' => 'form-control','required' => "true",'placeholder' => "e.g. 513513584",'data-required'=>"true",'id'=>"acct_no"]) !!}
+                                                {!! Form::text('acct_no', Input::old('acct_no'),['class' => 'form-control','required' => "true",'placeholder' => "e.g. 513513584", 'maxLength'=>"10",'data-required'=>"true",'id'=>"acct_no"]) !!}
                                             </div><!-- /.col -->
                                         </div><!-- /form-group -->
 
                                         <div class="form-group">
                                             <label class="control-label col-md-2">Bank Name: </label>
                                             <div class="col-lg-4">
-                                                    {!! Form::text('bank_name', Input::old('bank_name'),['class' => 'form-control','required' => "true",'placeholder' => "e.g. First Bank",
-                                                    'data-required'=>"true",'id'=>"bank_name"]) !!}
+                                                {!! Form::select('bank_name',$banks, Input::old('bank_name'),['class' => ' btn btn-default btn-lg',
+                                                'placeholder' => 'Choose Your Bank','required' => "true",'tabindex'=>"6"]) !!}
                                             </div><!-- /.col -->
                                         </div>
 
@@ -173,7 +165,7 @@
 
                                     <div>
                                         <h6>Step 2</h6>
-                                        <span style="font-weight: bolder; color: #4d4d4d">Wallet ID: </span>
+                                        <span style="font-weight: bolder; color: #4d4d4d">Wallet Address: </span>
                                         <span id="wallet_id_field"></span>
                                     </div>
                                     <br>
@@ -300,3 +292,17 @@
 
 
 @endsection
+
+@section('script')
+<script type="text/javascript">
+    $('#acct_no').bind('input propertychange', function() {
+        var data = $('#acct_no').val();
+
+        if (isNaN(data)) {
+            $('#acct_no').val(data);
+            $('#acct_no').val(data.slice(0,-1))
+
+        }
+    });
+</script>
+@stop

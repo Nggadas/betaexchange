@@ -25,8 +25,8 @@
               </div>
 
               <div class="form-group">
-                  <label>Wallet ID</label>
-                <input type="text" class="form-control" name="wallet_id" id="wallet_id" placeholder="Enter your Wallet ID">
+                  <label>Wallet Address</label>
+                <input type="text" class="form-control" name="wallet_id" id="wallet_id" placeholder="Enter your Wallet Address">
               </div>
 
               <input type="hidden" name="purchase_id" value="{{$bitsell->id}}">

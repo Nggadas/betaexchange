@@ -50,7 +50,7 @@
     @foreach($bank_details as $account)
 
       <div class="form-group">
-        <label for="wallet_id">Wallet ID:</label>
+        <label for="wallet_id">Wallet Address:</label>
         <input type="text" name="wallet_id" value="{{ $account->wallet_id }}" class="form-control input-lg" readonly="true" >
       </div>
 

@@ -45,7 +45,6 @@ Route::get('dashboard/buy-bitcoin', 'DashboardController@buy_bitcoin');
 Route::post('dashboard/save-bitcoin', 'DashboardController@save_bitcoin');
 Route::get('dashboard/buy-perfect-money', 'DashboardController@buy_perfect_money');
 Route::get('dashboard/confirm_order', 'ecurrencyController@confirm_order');
-Route::get('dashboard/confirm_order', 'ecurrencyController@confirm_order');
 Route::post('dashboard/save_perfect_money', 'DashboardController@save_perfect_money');
 Route::get('dashboard/sell_bitcoin', 'DashboardController@sell_bitcoin');
 Route::post('dashboard/sell_currency', 'HomeController@sell_ecurrency');

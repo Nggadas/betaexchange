@@ -79,7 +79,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="depositor_name">Wallet ID:</label>
+                    <label for="depositor_name">Wallet Address:</label>
                         <input type="text" name="depositor_name" value="{!! $pm->wallet_id !!}" class="form-control input-lg" readonly="true">
                 </div>
 

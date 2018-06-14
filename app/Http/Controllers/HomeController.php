@@ -101,11 +101,13 @@ class HomeController extends Controller
             $pin=mt_rand(100000,999999).mt_rand(100000,999999).$characters[rand(0,strlen($characters)-3)];
             $ref_no=str_shuffle($pin);
             $input=$request->all();
-            $email = $input['email'];
             $bank_details = BankDetails::all();
             $wallet_id = $bank_details[0]['wallet_id'];
             $pm_account_no = $bank_details[0]['pm_account_no'];
             $user=\Auth::user();
+            $email = $user->email;
+            $admin_email = $bank_details[0]->email;
+            $phone_no = $user->phone_no;
 
            if($input["currency_type"]=="Bitcoin")
            {
@@ -114,8 +116,8 @@ class HomeController extends Controller
                     'account_name' => $input['account_name'],
                     'account_no' => $input['account_no'],
                     'bank_name' => $input['bank_name'],
-                    'phone_no' => $input['phone_no'],
-                    'email' => $input['email'],
+                    'phone_no' => $user->phone_no,
+                    'email' => $user->email,
                     'unit' => $input['unit'],
                     'price' => $input['price1'],
                     'total' => $input['total'],
@@ -124,8 +126,7 @@ class HomeController extends Controller
                     'user_id'=>Auth::user()->id
                 ]);
 
-                $this->notify_currency_sales('Bitcoins',$user,$ref_no,$email,$input['unit'],$input['price1'],$input['total'],$input['account_name'],$input['account_no'],$input['bank_name'],$wallet_id,$pm_account_no, $input['phone_no']);
-
+                $this->notify_currency_sales('Bitcoins',$user,$ref_no,$admin_email,$email,$input['unit'],$input['price1'],$input['total'],$input['account_name'],$input['account_no'],$input['bank_name'],$wallet_id,$pm_account_no, $phone_no);
 
            }
            else if($input["currency_type"]=="Perfect Money")
@@ -135,8 +136,8 @@ class HomeController extends Controller
                     'account_name' => $input['account_name'],
                     'account_no' => $input['account_no'],
                     'bank_name' => $input['bank_name'],
-                    'phone_no' => $input['phone_no'],
-                    'email' => $input['email'],
+                    'phone_no' => $user->phone_no,
+                    'email' => $user->email,
                     'unit' => $input['unit'],
                     'price' => $input['price1'],
                     'total' => $input['total'],
@@ -144,7 +145,7 @@ class HomeController extends Controller
                     'user_id'=>Auth::user()->id
                 ]);
 
-                $this->notify_currency_sales('Perfect Money',$user,$ref_no,$email,$input['unit'],$input['price1'],$input['total'],$input['account_name'],$input['account_no'],$input['bank_name'],$wallet_id = null,$pm_account_no, $input['phone_no']);
+                $this->notify_currency_sales('Perfect Money',$user,$ref_no,$email,$admin_email,$input['unit'],$input['price1'],$input['total'],$input['account_name'],$input['account_no'],$input['bank_name'],$wallet_id = null,$pm_account_no, $phone_no);
 
 
            }
@@ -283,7 +284,7 @@ class HomeController extends Controller
     try {
         
     
-   $input=$request->all();
+    $input=$request->all();
     $this->validate($request, [
         'email' => 'required|unique:users',
         'phone_no'=>'required|unique:users|max:10',
@@ -386,7 +387,7 @@ class HomeController extends Controller
     }
 
     //email for when user is signed in
-    private function notify_currency_sales($cType,$user,$ref_no,$email,$units,$price,$total_units,$account_name,$account_no,$bank_name,$wallet_id,$pm_account_no,$phone_no)
+    private function notify_currency_sales($cType,$user,$ref_no,$email,$admin_email,$units,$price,$total_units,$account_name,$account_no,$bank_name,$wallet_id,$pm_account_no,$phone_no)
     {
 
         try
@@ -401,27 +402,36 @@ class HomeController extends Controller
             $data['account_name']=$account_name;
             $data['account_no']=$account_no;
             $data['bank_name']=$bank_name;
+            $data['phone_no'] = $phone_no;
             $data['wallet_id']=$wallet_id;
             $data['pm_account_no']=$pm_account_no;
-            $data['phone_no'] = $phone_no;
+
+            if ($wallet_id == null) {
+                $data['bitcoin_name'] = 'perfect money';
+                $data['wallet_name'] = 'perfect money account';
+
+            } else {
+                $data['bitcoin_name'] = 'bitcoin';
+                $data['wallet_name'] = 'wallet';
+            }
+
+            //admin
+             Mail::send('emails.sell_currency',$data, function($message) use ($admin_email)
+             {
+                  $message->to($admin_email)
+                  ->bcc('info@betaexchangeng.com')
+                  ->from('info@betaexchangeng.com')
+                  ->subject('Sell Currency Transaction!!');
+             });
 
              Mail::send('emails.sell_e_currency_confirmation',$data, function($message) use ($email)
              {
-                  $message->to('anihuchenna16@gmail.com')
+                  $message->to($email)
                   ->bcc('info@betaexchangeng.com')
                   ->from('info@betaexchangeng.com')
                   ->subject('Sell Currency Transaction!!');
              });
 
-            
-             //admin
-             Mail::send('emails.sell_currency',$data, function($message) use ($email)
-             {
-                  $message->to("uchennaanih16@gmail.com")
-                  ->bcc('info@betaexchangeng.com')
-                  ->from('info@betaexchangeng.com')
-                  ->subject('Sell Currency Transaction!!');
-             });
 
         }
             catch(\Exception $e)

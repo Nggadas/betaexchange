@@ -89,15 +89,15 @@
 
                                     <div class="tab-pane fade" id="wizardContent2">
                                         <div class="form-group">
-                                            <label class="control-label col-lg-2" id="wallet_id" >Wallet Id</label>
+                                            <label class="control-label col-lg-2" id="wallet_id" >Wallet Address</label>
                                             <div class="col-lg-6">
-                                                <input class="form-control input-lg" required="true" type="text"  placeholder="Enter your Wallet Id" data-required="true" name="wallet" id="wallet" data-ng-model="wallet_id" oninput="this.className =''">
+                                                <input class="form-control input-lg" required="true" type="text"  placeholder="Enter your Wallet Address" data-required="true" name="wallet" id="wallet" data-ng-model="wallet_id" oninput="this.className =''">
                                             </div><!-- /.col -->
                                         </div><!-- /form-group -->
                                         <div class="form-group">
-                                            <label class="control-label col-lg-2" id="confirm_wallet_id">Confirm Wallet Id</label>
+                                            <label class="control-label col-lg-2" id="confirm_wallet_id">Confirm Wallet Address</label>
                                             <div class="col-lg-6">
-                                                <input class="form-control input-lg" required="true" type="text"  placeholder="Confirm Wallet Id" data-required="true" name="confirm_wallet" id="confirm_wallet" data-equalto="#wallet" oninput="this.className =''">
+                                                <input class="form-control input-lg" required="true" type="text"  placeholder="Confirm Wallet Address" data-required="true" name="confirm_wallet" id="confirm_wallet" data-equalto="#wallet" oninput="this.className =''">
 
                                             </div>
 
@@ -178,7 +178,7 @@
                                       <div class="form-group">
                                        <h4> <b>Name</b>: <strong>@{{first_name}}  @{{last_name}}</strong></h4><br>
                                        <h4>Email: <strong>@{{email}}</strong></h4><br>
-                                       <h4>Wallet ID: <strong>@{{wallet_id}}</strong></h4>
+                                       <h4>Wallet Address: <strong>@{{wallet_id}}</strong></h4>
                                        <h4>Units: <strong>@{{units}}</strong></h4>
                                        <h4>Total : <strong> @{{units * unit_price}}</strong></h4>
                                       </div>

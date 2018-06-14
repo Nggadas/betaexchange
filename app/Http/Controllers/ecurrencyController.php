@@ -100,7 +100,7 @@ public function  buy_currency(Request $request) {
         $this->notify_bitcoin_purchase($register_user,$input['units'],$ref_no, $input['wallet'], $input['total_units'], $input['payment_method']);
         //$this->testmail();
         //dd($input);
-        return redirect()->intended('dashboard/confirm_order');
+        return redirect()->intended('dashboard/thank-you');
 
 
         }elseif ($request['currency_type'] == "Perfect Money") {
@@ -131,7 +131,7 @@ public function  buy_currency(Request $request) {
           $this->send_verifycode($code);
           $this->notify_perfect_purchase($register_user,$input['units'],$ref_no, $input['confirm_wallet'],$input['wallet'], $input['total_units'], $input['payment_method']);
           //$this->testmail();
-        return redirect()->intended('dashboard/confirm_order');
+        return redirect()->intended('dashboard/thank-you');
         }
      
 

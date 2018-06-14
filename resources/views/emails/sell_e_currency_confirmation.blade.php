@@ -30,19 +30,24 @@
 
 	<p>Funding Instructions:</p>
 
-	<p>Please send bitcoins to</p>
 
 	@if($wallet_id == null)
+		<p>Please send perfect money to</p>
+
 		<b>Account No: </b> <em>{{ $pm_account_no }}</em>
+		
 	@else
-		<b>Our Wallet ID: </b> <em>{{ $wallet_id }}</em>
+		<p>Please send bitcoins to</p>
+
+		<b>Our Wallet Address: </b> <em>{{ $wallet_id }}</em>
+
 	@endif
 
 	<p>Please note that we will not be responsible for funding a wrong account provided by you and always ensure your computer is secure.</p>
 
 	<p style="color: #ff0000;">
 		<strong>IMPORTANT!!!</strong>
-		After the bitcoin is sent to our wallet, Make sure you sign into your dashboard at BetaExchangeNg.com and click the 'Send Alert' beside your order detail, if not, we will not get your order and it might not be processed.
+		After the {{ $bitcoin_name }} is sent to our {{ $wallet_name }}, Make sure you sign into your dashboard at BetaExchangeNg.com and click the 'Send Alert' beside your order detail, if not, we will not get your order and it might not be processed.
 	</p>
 
 	<p>For more info/help, call or Whatsapp the phone numbers below.</p>

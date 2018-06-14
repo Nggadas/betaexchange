@@ -133,7 +133,7 @@
                                         <div class="form-group">
                                             <label class="control-label col-lg-2">Account Number: </label>
                                             <div class="col-lg-4">
-                                                {!! Form::number('acct_no', Input::old('acct_no'),['class' => 'form-control','required' => "true",'placeholder' => "e.g. 513513584",'data-required'=>"true",'id'=>"acct_no"]) !!}
+                                                {!! Form::text('acct_no', Input::old('acct_no'),['class' => 'form-control','required' => "true",'placeholder' => "e.g. 513513584", 'maxLength'=>"10",'data-required'=>"true",'id'=>"acct_no"]) !!}
                                             </div><!-- /.col -->
                                         </div><!-- /form-group -->
 

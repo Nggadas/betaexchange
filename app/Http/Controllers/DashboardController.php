@@ -46,6 +46,7 @@ class DashboardController extends Controller
     public function buy_bitcoin()
     {    
         $account_detail = AccountDetail::where('user_id','=',Auth::user()->id)->get();
+        $user= \Auth::user();
         $display_form = "";
 
         if (empty($account_detail[0])) {
@@ -54,8 +55,11 @@ class DashboardController extends Controller
           $display_form = "display: none;";
         }
         
+        $data['banks']= Utility::GetBanks();
         $data['display_form'] = $display_form;
-
+        $data['auth_first_name'] = $user->first_name;
+        $data['auth_middle_name'] = $user->middle_name;
+        $data['auth_last_name'] = $user->last_name;
         $data['bitcoins']=Bitcoin::where('user_id','=',Auth::user()->id)->get();
         $data['payment_method']=Utility::PaymentMethod(); 
         $data['current_price']=Price::where('id',1)->value('bitcoin');
@@ -74,8 +78,19 @@ class DashboardController extends Controller
         $account_detail = AccountDetail::where('user_id','=',Auth::user()->id)->get();
         $email=$user->email;
 
+        //Validate account details
+        if ($input['first_name'] != $user->first_name) {
+            return redirect()->back()->withErrors('Error on step 3: Account first name must match your betaexchange first name.')->withInput();
+        }else if ($input['last_name'] != $user->last_name && $input['last_name'] != $user->middle_name) {
+            return redirect()->back()->withErrors('Error on step 3: Account last name must match your betaexchange middle or last name.')->withInput();
+        }
+
+        if (empty($account_detail[0])) {
+            $this->save_account_details($user->id,$input['first_name'],$input['middle_name'],$input['last_name'],$input['acct_no'],$input['bank_name']);
+        }
+
        $messages = ['units.required' => 'Enter units',
-       'wallet.same' => 'Your confirm wallet id does not match',
+       'wallet.same' => 'Your confirm wallet address does not match',
        ];
 
        $rules = ['units' => 'required|numeric',
@@ -106,10 +121,6 @@ class DashboardController extends Controller
             'method' => $input['payment_method'],
             'ref_no' => $ref_no
         ]);
-
-        if (empty($account_detail[0])) {
-            $this->save_account_details($input['first_name'],$input['middle_name'],$input['last_name'],$input['acct_no'],$input['bank_name']);
-        }
 
          //$this->send_sms($user->phone_no,'Welcome to Betaexchangeng');
         $this->notify_bitcoin_purchase($user,$input['units'],$ref_no,$input['wallet'],$input['total_units'],$input['payment_method'],$email);
@@ -181,13 +192,13 @@ class DashboardController extends Controller
 
      }
 
-    public function save_account_details($first_name,$middle_name,$last_name,$account_no,$bank_name)
+    public function save_account_details($user_id,$first_name,$middle_name,$last_name,$account_no,$bank_name)
     {
-        $user=\Auth::user();
 
         try {
+
             $next=AccountDetail::create([
-            'user_id' => $user['id'],
+            'user_id' => $user_id,
             'account_first_name' => $first_name,
             'account_middle_name' => $middle_name,
             'account_last_name' => $last_name,
@@ -230,7 +241,7 @@ class DashboardController extends Controller
    }
 
 
-     public function sell_bitcoin()
+    public function sell_bitcoin()
     {
         $data['banks']=Utility::GetBanks();
         $data['pm_price']=Price::find(1)->perfect_money_sell;
@@ -302,8 +313,8 @@ class DashboardController extends Controller
           $display_form = "display: none;";
         }
         
+        $date['banks']= Utility::GetBanks();
         $data['display_form'] = $display_form;
-
         $data['perfects']=PerfectMoney::where('user_id','=',Auth::user()->id)->get();   
         $data['payment_method']=Utility::PaymentMethod(); 
         $data['current_price']=Price::where('id',1)->value('perfect_money');   
@@ -321,6 +332,17 @@ class DashboardController extends Controller
         $postData = $request->all();
         $account_detail = AccountDetail::where('user_id','=',Auth::user()->id)->get();
         $email=$user->email;
+        
+        //Validate account details
+        if ($input['first_name'] != $user->first_name) {
+            return redirect()->back()->withErrors('Error on step 3: Account first name must match your betaexchange first name.')->withInput();
+        }else if ($input['last_name'] != $user->last_name && $input['last_name'] != $user->middle_name) {
+            return redirect()->back()->withErrors('Error on step 3: Account last name must match your betaexchange middle or last name.')->withInput();
+        }
+
+        if (empty($account_detail[0])) {
+            $this->save_account_details($user->id,$input['first_name'],$input['middle_name'],$input['last_name'],$input['acct_no'],$input['bank_name']);
+        }
 
        $messages = [
         'units.required' => 'Enter units'
@@ -355,10 +377,6 @@ class DashboardController extends Controller
             'method' => $input['payment_method'],
             'ref_no' => $ref_no
         ]);
-
-        if (empty($account_detail[0])) {
-            $this->save_account_details($input['first_name'],$input['middle_name'],$input['last_name'],$input['acct_no'],$input['bank_name']);
-        }
 
         $this->notify_perfect_purchase($user,$input['units'],$ref_no,$input['pm_account_name'],$input['account_no'],$input['total_units'],$input['payment_method'],$email);
  

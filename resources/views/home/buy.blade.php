@@ -348,10 +348,10 @@
         
         //$('#wallet').attr('pattern', '.{3,}');
         $("#payment_header").html("<h4>Bitcoin</h4>");
-        $("#payment_type").html("Wallet ID &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp ");
-        $("#confirm_payment_type").html("Confirm Wallet ID");
+        $("#payment_type").html("Wallet address &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp ");
+        $("#confirm_payment_type").html("Confirm Wallet Address");
         $('#wallet').val();
-         $("#e_currency").html("Wallet ID ");
+         $("#e_currency").html("Wallet Address ");
 
         $('#units').keyup(function () {
        changePrice();

@@ -32,9 +32,7 @@ class CustomerController extends Controller
   public function index()
   {
     $data['title']='Customers';
-    $data['users']=User::where('isAdmin','=',false)
-    ->with("account_detail","next_kin")->get();
-   
+    $data['users']=User::where('isAdmin','=',false)->latest()->with("account_detail","next_kin")->get();
     return view('admin.customers.index',$data);
   }
 

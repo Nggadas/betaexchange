@@ -74,6 +74,7 @@ $(function	()	{
 					$('#prevStep2').removeClass('disabled');
 				}
 				else if(currentStep_2 == 3)	{
+
 					$('#wizardDemo2 li:eq(2) a').tab('show');
 				}
 				else if(currentStep_2 == 4)	{

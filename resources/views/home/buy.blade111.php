@@ -69,18 +69,18 @@
                                     </div>
                                     <div class="tab-pane fade" id="wizardContent2">
                                         <div class="form-group">
-                                            <label class="control-label col-lg-2">Wallet Id</label>
+                                            <label class="control-label col-lg-2">Wallet Address</label>
                                             <div class="col-lg-6">
-                                                {!! Form::text('wallet', Input::old('wallet'),['class' => 'form-control input-lg','required' => "true",'placeholder' => "Enter your Wallet Id",
+                                                {!! Form::text('wallet', Input::old('wallet'),['class' => 'form-control input-lg','required' => "true",'placeholder' => "Enter your Wallet Address",
                                                  'data-required'=>"true",'id'=>"wallet"]) !!}
 
                                             </div><!-- /.col -->
                                         </div><!-- /form-group -->
                                         <div class="form-group">
-                                            <label class="control-label col-lg-2">Confirm Wallet Id</label>
+                                            <label class="control-label col-lg-2">Confirm Wallet Address</label>
                                             <div class="col-lg-6">
 
-                                                {!! Form::text('confirm_wallet', Input::old('confirm_wallet'),['class' => 'form-control input-lg','required' => "true",'placeholder' => "Confirm Wallet Id",
+                                                {!! Form::text('confirm_wallet', Input::old('confirm_wallet'),['class' => 'form-control input-lg','required' => "true",'placeholder' => "Confirm Wallet Address",
                                                      'data-required'=>"true",'id'=>"confirm_wallet",'data-equalto'=>"#wallet"]) !!}
 
                                             </div>

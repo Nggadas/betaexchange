@@ -60,7 +60,7 @@
                                     <tr>
                                         <th>Date</th>
                                         <th>Ref No</th>
-                                        <th>Wallet ID</th>
+                                        <th>Wallet Address</th>
                                         <th>Units</th>
                                         <th>Total</th>
                                         <th>Method</th>

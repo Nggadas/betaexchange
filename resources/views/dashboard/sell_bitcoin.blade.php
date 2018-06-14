@@ -72,7 +72,7 @@
                  <div class="form-group">
                     <label for="middle_name">Bank Account No:</label>
     {!! Form::text('account_no', Input::old('account_no'),['class' => 'form-control input-lg','placeholder' => "Enter Account No",'required' => "true",
-        'tabindex'=>'2']) !!}
+        'tabindex'=>'2', 'id'=>"account_no",'maxLength'=>"10"]) !!}
                     
                     <span class="text-danger"></span>
                 </div>
@@ -84,28 +84,6 @@
           </div>
           </div>
           </div>
-       <div class="row">
-       <div class="col-xs-12 col-sm-6 col-md-6">    
-        <div class="form-group">
-            <label for="email">Email Address:</label>
-           {!! Form::email('email', Input::old('email'),['class' => 'form-control input-lg','required' => "true",'placeholder' => "Enter Email Address",
-        'tabindex'=>'4']) !!}
-                            <span class="text-danger"></span>
-                            <span id="emailstatus"></span>
-
-        </div>
-        </div>
-        <div class="col-xs-12 col-sm-6 col-md-6" >  
-             <div class="form-group">
-            <label for="phone_no">Phone No:</label>
-            {!! Form::text('phone_no', Input::old('phone_no'),['class' => 'form-control input-lg','required' => "true",'placeholder' => "Enter PhoneNo",
-        'tabindex'=>'3']) !!}
-                            <span class="text-danger"></span>
-                           
-        </div>
-             </div>
-        </div>
-
 
             <hr class="colorgraph">
             <div class="row" style="margin-bottom: 40px;">
@@ -173,7 +151,17 @@
           $("#total").val(total);
        }
 
-        });
+       $('#account_no').bind('input propertychange', function() {
+            var data = $('#account_no').val();
+
+            if (isNaN(data)) {
+                $('#account_no').val(data);
+                $('#account_no').val(data.slice(0,-1))
+
+            }
+    });
+
+    });
 
         </script>
 @stop

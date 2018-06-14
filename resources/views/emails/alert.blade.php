@@ -19,7 +19,7 @@
 		<br>
 		<b>Amount:</b> <em>{!! $amount_sent !!}</em>
 		<br>
-		<b>Wallet ID</b> <em>{!! $wallet_id !!}</em>
+		<b>Wallet Address</b> <em>{!! $wallet_id !!}</em>
 	</div>
 
 	

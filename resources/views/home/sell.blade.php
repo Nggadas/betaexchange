@@ -112,7 +112,7 @@
              </div>
         </div>
             <!-- <div class="form-group" id="wallet_panel"> -->
-                    <!-- <label for="middle_name">Bitcon Wallet Id:</label> -->
+                    <!-- <label for="middle_name">Bitcon Wallet Address:</label> -->
       <input type="hidden" name="wallet_id" id="wallet_id" class="form-control input-lg"   tabindex="2" readonly="true" value="14PW1TK5rFhDr72Zh9w2nD6XQ2L2ckpuv7">                 
                    <!--  <span class="text-danger"></span>
                 </div>

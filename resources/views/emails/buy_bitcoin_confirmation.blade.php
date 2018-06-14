@@ -13,7 +13,7 @@
 	<div>
 		<b>Order Number: </b> <em>{!! $ref_no !!}</em>
 		<br>
-		<b>Your Wallet ID: </b> <em>{!! $wallet_id !!}</em>
+		<b>Your Wallet Address: </b> <em>{!! $wallet_id !!}</em>
 		<br>
 		<b>Units ($): </b> <em>{{ $units }}</em>
 		<br>

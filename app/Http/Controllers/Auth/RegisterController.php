@@ -152,6 +152,7 @@ public function register(Request $data)
       DB::beginTransaction();
       $user= User::create([
         'id' => $user_id,
+        'user_id' => $user_id,
         'first_name' => $data['first_name'],
         'last_name' => $data['last_name'],
         'middle_name' => $data['middle_name'],

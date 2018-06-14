@@ -65,15 +65,15 @@
                                         
                                     <div class="tab-pane fade" id="wizardContent2">
                                         <div class="form-group">
-                                            <label class="control-label col-lg-2">Wallet Id</label>
+                                            <label class="control-label col-lg-2">Wallet Address</label>
                                             <div class="col-lg-6">
-                                                <input class="form-control input-lg" required="true" type="text"  placeholder="Enter your Wallet Id" data-required="true" name="wallet" id="wallet">
+                                                <input class="form-control input-lg" required="true" type="text"  placeholder="Enter your Wallet Address" data-required="true" name="wallet" id="wallet">
                                             </div><!-- /.col -->
                                         </div><!-- /form-group -->
                                         <div class="form-group">
-                                            <label class="control-label col-lg-2">Confirm Wallet Id</label>
+                                            <label class="control-label col-lg-2">Confirm Wallet Address</label>
                                             <div class="col-lg-6">
-                                                <input class="form-control input-lg" required="true" type="text"  placeholder="Confirm Wallet Id" data-required="true" name="confirm_wallet" id="confirm_wallet" data-equalto="#wallet">
+                                                <input class="form-control input-lg" required="true" type="text"  placeholder="Confirm Wallet Address" data-required="true" name="confirm_wallet" id="confirm_wallet" data-equalto="#wallet">
 
                                             </div>
 

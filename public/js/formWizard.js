@@ -49,7 +49,7 @@ function nextPrev(n) {
     if($('#wallet').val().length < 5) {
       // 26
         $('#msg_error').show();
-        $('#msg_error').html('invalid wallet id');
+        $('#msg_error').html('invalid wallet address');
         $('#nextBtn').attr('disabled',true);
         //alert($('#wallet').val().length);
 
@@ -76,7 +76,7 @@ function nextPrev(n) {
       if(confirm_wallet != wallet) {
         $('#wallet_msg').show();
         $('#wallet_ok').hide();
-        $('#wallet_msg').html('wallet id didnt match');
+        $('#wallet_msg').html('wallet address didnt match');
          $('#nextBtn').attr('disabled',true);
       } else {
         $('#wallet_msg').hide();
