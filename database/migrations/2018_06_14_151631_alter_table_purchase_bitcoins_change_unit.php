@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddUserIdToPurchaseBitcoins extends Migration
+class AlterTablePurchaseBitcoinsChangeUnit extends Migration
 {
     /**
      * Run the migrations.
@@ -14,10 +14,10 @@ class AddUserIdToPurchaseBitcoins extends Migration
     public function up()
     {
         Schema::table('purchase_bitcoins', function (Blueprint $table) {
-             $table->integer('user_id')->unsigned();
+            $table->float('unit')->change();
         });
     }
-
+    
     /**
      * Reverse the migrations.
      *
@@ -26,7 +26,8 @@ class AddUserIdToPurchaseBitcoins extends Migration
     public function down()
     {
         Schema::table('purchase_bitcoins', function (Blueprint $table) {
-            $table->dropColumn('user_id');
+            //
+            $table->dropColumn('unit');
         });
     }
 }

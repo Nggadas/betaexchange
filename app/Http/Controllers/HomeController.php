@@ -463,6 +463,8 @@ class HomeController extends Controller
      private function notify_sales($user,$ctype,$account_name, $account_no, $bank_name, $phone_no, $email, $unit, $price, $total, $ref_no, $wallet_id, $pm_no) {
         try
         {
+            $bank_details=BankDetails::all();
+            $admin_email = $bank_details[0]->email;
 
             $data['user']=$user;
             $data['ctype']=$ctype;
@@ -479,23 +481,23 @@ class HomeController extends Controller
             $data['wallet_id'] = $wallet_id;
 
             //admin
-                Mail::send('emails.sell_currency',$data, function($message)
-                {
-                $message->to("anihuchenna16@gmail.com")
-                ->bcc('info@betaexchangeng.com')
-                ->from('info@betaexchangeng.com')
-                    ->subject('Sell E-currency to us!!');
-                });
+            Mail::send('emails.sell_currency',$data, function($message) use($admin_email)
+            {
+            $message->to($admin_email)
+            ->bcc('info@betaexchangeng.com')
+            ->from('info@betaexchangeng.com')
+                ->subject('Sell E-currency to us!!');
+            });
 
 
-                //user
-                Mail::send('emails.sell_ecurrency',$data, function($message)
-                {
-                $message->to("anihuchenna16@gmail.com")
-                ->bcc('info@betaexchangeng.com')
-                ->from('info@betaexchangeng.com')
-                    ->subject('Sell E-currency to us!!');
-                });
+            //user
+            Mail::send('emails.sell_ecurrency',$data, function($user)
+            {
+            $message->to($user->email)
+            ->bcc('info@betaexchangeng.com')
+            ->from('info@betaexchangeng.com')
+                ->subject('Sell E-currency to us!!');
+            });
 
 
         }

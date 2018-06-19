@@ -12,15 +12,15 @@
              <div class="about-bottom" style="margin-top: 30px;">
                 <div class="panel panel-default">
                 @if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
 
-@endif 
+                @endif 
                     <form class="form-horizontal" id="formWizard2" method="post" action="{{ url('dashboard/save_perfect_money') }}"  novalidate>
                     {{ csrf_field() }} 
                          <div class="panel-heading">
@@ -140,8 +140,8 @@
                                         <div class="form-group">
                                             <label class="control-label col-md-2">Bank Name: </label>
                                             <div class="col-lg-4">
-                                                    {!! Form::text('bank_name', Input::old('bank_name'),['class' => 'form-control','required' => "true",'placeholder' => "e.g. First Bank",
-                                                    'data-required'=>"true",'id'=>"bank_name"]) !!}
+                                                {!! Form::select('bank_name',$banks, Input::old('bank_name'),['class' => ' btn btn-default btn-lg',
+                                                'placeholder' => 'Choose Your Bank','required' => "true",'tabindex'=>"6"]) !!}
                                             </div><!-- /.col -->
                                         </div>
 
@@ -307,6 +307,17 @@
 
 
 @endsection
-@section('script')
 
+@section('script')
+<script type="text/javascript">
+    $('#acct_no').bind('input propertychange', function() {
+        var data = $('#acct_no').val();
+
+        if (isNaN(data)) {
+            $('#acct_no').val(data);
+            $('#acct_no').val(data.slice(0,-1))
+
+        }
+    });
+</script>
 @stop

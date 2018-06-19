@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddEmailToBankDetails extends Migration
+class AlterTablePurchasePerfectMoneyChangeUnit extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,11 @@ class AddEmailToBankDetails extends Migration
      */
     public function up()
     {
-        Schema::table('bank_details', function (Blueprint $table) {
-            $table->string('email');
+        Schema::table('purchase_perfect_money', function (Blueprint $table) {
+            $table->float('unit')->change();
         });
     }
-
+    
     /**
      * Reverse the migrations.
      *
@@ -25,8 +25,9 @@ class AddEmailToBankDetails extends Migration
      */
     public function down()
     {
-        Schema::table('bank_details', function (Blueprint $table) {
-            $table->dropColumn('email');
+        Schema::table('purchase_perfect_money', function (Blueprint $table) {
+            //
+            $table->dropColumn('unit');
         });
     }
 }

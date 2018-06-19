@@ -78,14 +78,14 @@ class DashboardController extends Controller
         $account_detail = AccountDetail::where('user_id','=',Auth::user()->id)->get();
         $email=$user->email;
 
-        //Validate account details
-        if ($input['first_name'] != $user->first_name) {
-            return redirect()->back()->withErrors('Error on step 3: Account first name must match your betaexchange first name.')->withInput();
-        }else if ($input['last_name'] != $user->last_name && $input['last_name'] != $user->middle_name) {
-            return redirect()->back()->withErrors('Error on step 3: Account last name must match your betaexchange middle or last name.')->withInput();
-        }
-
         if (empty($account_detail[0])) {
+            //Validate account details
+            if ($input['first_name'] != $user->first_name) {
+                return redirect()->back()->withErrors('Error on step 3: Account first name must match your betaexchange first name.')->withInput();
+            }else if ($input['last_name'] != $user->last_name && $input['last_name'] != $user->middle_name) {
+                return redirect()->back()->withErrors('Error on step 3: Account last name must match your betaexchange middle or last name.')->withInput();
+            }
+
             $this->save_account_details($user->id,$input['first_name'],$input['middle_name'],$input['last_name'],$input['acct_no'],$input['bank_name']);
         }
 
@@ -156,20 +156,22 @@ class DashboardController extends Controller
               }else if ($method == "3"){
                   $method = "Short Code";
               }
-     
+              
+              $bank_details= BankDetails::all();
+              $admin_email = $bank_details[0]->email;
+
               $data['user']=$user;
               $data['units']=$units;
               $data['ref_no']=$ref_no;
               $data['wallet_id']=$wallet_id;
               $data['total_units']=$total_units;
               $data['method']=$method;
+              $data['bank_details']= $bank_details;
 
-              $data['bank_details']= BankDetails::all();
-
-              //email to aadmin
-              Mail::send('emails.buy_bitcoin',$data, function($message) use ($user)
+              //email to admin
+              Mail::send('emails.buy_bitcoin',$data, function($message) use ($admin_email)
               {
-                 $message->to("enggadas80@gmail.com")
+                 $message->to($admin_email)
                  ->bcc('info@betaexchangeng.com')
                  ->from('info@betaexchangeng.com')
                  ->subject('Bitcoin new order!!');
@@ -313,7 +315,7 @@ class DashboardController extends Controller
           $display_form = "display: none;";
         }
         
-        $date['banks']= Utility::GetBanks();
+        $data['banks']= Utility::GetBanks();
         $data['display_form'] = $display_form;
         $data['perfects']=PerfectMoney::where('user_id','=',Auth::user()->id)->get();   
         $data['payment_method']=Utility::PaymentMethod(); 
@@ -332,15 +334,15 @@ class DashboardController extends Controller
         $postData = $request->all();
         $account_detail = AccountDetail::where('user_id','=',Auth::user()->id)->get();
         $email=$user->email;
-        
-        //Validate account details
-        if ($input['first_name'] != $user->first_name) {
-            return redirect()->back()->withErrors('Error on step 3: Account first name must match your betaexchange first name.')->withInput();
-        }else if ($input['last_name'] != $user->last_name && $input['last_name'] != $user->middle_name) {
-            return redirect()->back()->withErrors('Error on step 3: Account last name must match your betaexchange middle or last name.')->withInput();
-        }
 
         if (empty($account_detail[0])) {
+            //Validate account details
+            if ($input['first_name'] != $user->first_name) {
+                return redirect()->back()->withErrors('Error on step 3: Account first name must match your betaexchange first name.')->withInput();
+            }else if ($input['last_name'] != $user->last_name && $input['last_name'] != $user->middle_name) {
+                return redirect()->back()->withErrors('Error on step 3: Account last name must match your betaexchange middle or last name.')->withInput();
+            }
+
             $this->save_account_details($user->id,$input['first_name'],$input['middle_name'],$input['last_name'],$input['acct_no'],$input['bank_name']);
         }
 
@@ -410,6 +412,9 @@ class DashboardController extends Controller
                 $method = "Short Code";
             }
 
+            $bank_details= BankDetails::all();
+            $admin_email = $bank_details[0]->email;
+
             $data['user']=$user;
             $data['units']=$units;
             $data['total_units']=$total_units;
@@ -417,13 +422,12 @@ class DashboardController extends Controller
             $data['account_name']=$account_name;
             $data['account_no']=$account_no;
             $data['method']=$method;
-
-            $data['bank_details']= BankDetails::all();
+            $data['bank_details']= $bank_details;
 
             //email to admin
-            Mail::send('emails.buy_perfect_money',$data, function($message) use ($user)
+            Mail::send('emails.buy_perfect_money',$data, function($message) use ($admin_email)
             {
-                  $message->to("enggadas80@gmail.com")
+                  $message->to($admin_email)
                   ->bcc('info@betaexchangeng.com')
                   ->from('info@betaexchangeng.com')
                   ->subject('Perfect Money new order!!');

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddUserIdPurchasePerfectMoney extends Migration
+class AlterTablePerfectMoneyChangeUnit extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,11 @@ class AddUserIdPurchasePerfectMoney extends Migration
      */
     public function up()
     {
-        Schema::table('purchase_perfect_money', function (Blueprint $table) {
-            $table->integer('user_id')->unsigned();
+        Schema::table('perfect_money', function (Blueprint $table) {
+            $table->float('unit')->change();
         });
     }
-
+    
     /**
      * Reverse the migrations.
      *
@@ -25,8 +25,9 @@ class AddUserIdPurchasePerfectMoney extends Migration
      */
     public function down()
     {
-        Schema::table('purchase_perfect_money', function (Blueprint $table) {
-            $table->dropColumn('user_id');
+        Schema::table('perfect_money', function (Blueprint $table) {
+            //
+            $table->dropColumn('unit');
         });
     }
 }

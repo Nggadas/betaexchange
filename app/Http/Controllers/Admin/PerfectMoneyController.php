@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\User;
+use App\Confirm_buy_pm;
 use App\Helpers\Utility;
 use App\Models\PerfectMoney;
 use Illuminate\Mail\Mailer;
@@ -74,9 +75,10 @@ class PerfectMoneyController extends Controller
    */
   public function edit($id)
   {
-      $perfect=PerfectMoney::find($id);   
+      $perfect=PerfectMoney::find($id); 
+      $data['alert_details']=Confirm_buy_pm::where('perfect_money_id', $id)->get();
       $data['page_title']="Process ";
-      $data['page_action']="Activate";
+      $data['page_action']="Process Order";
       $data['status']=Utility::Status();
       $data['payment_status']=Utility::ActivationStatus();
       $data['user']=User::find($perfect->user_id);

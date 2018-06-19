@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddPaymentAlertToBitcoins extends Migration
+class AlterTableBitcoinsChangeUnit extends Migration
 {
     /**
      * Run the migrations.
@@ -14,10 +14,10 @@ class AddPaymentAlertToBitcoins extends Migration
     public function up()
     {
         Schema::table('bitcoins', function (Blueprint $table) {
-            $table->string('payment_alert')->default('not sent');
+            $table->float('unit')->change();
         });
     }
-
+    
     /**
      * Reverse the migrations.
      *
@@ -26,7 +26,7 @@ class AddPaymentAlertToBitcoins extends Migration
     public function down()
     {
         Schema::table('bitcoins', function (Blueprint $table) {
-            $table->dropColumn('payment_alert');
+            $table->dropColumn('unit');
         });
     }
 }

@@ -41,6 +41,7 @@
 
   <li style="padding: 5px;" class="active"><a data-toggle="tab" href="#home">Basic Details</a></li>
   <li style="padding: 5px;"><a data-toggle="tab" href="#menu2">Order Details</a></li>
+  <li style="padding: 5px;"><a data-toggle="tab" href="#menu3">Payment Details</a></li>
  
   </ul>
   <div class="tab-content">
@@ -167,15 +168,49 @@
         <div class="form-group" style="margin-top: 25px;"> 
             <input style="width:300px; height:35px" type="text" id="custom_status" name="custom_status">
         </div>
-
   </div>
-</div>
-</div>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            <button type="submit" id="submit" class="btn btn-primary">{!! $page_action !!}</button>
 
-        </div>
+    <div id="menu3" class="tab-pane fade">
+        @if(!empty($alert_details[0]))
+            <div class="form-group">
+                <label for="date_sent">Date Sent:</label>
+                <input type="text" name="date_sent" value="{{ $alert_details[0]->date_sent }}" class="form-control input-lg" readonly="true" >
+            </div>
+            <div class="form-group">
+                <label for="transfer_details">Transfer Details:</label>
+                <input type="text" name="transfer_details" value="{{ $alert_details[0]->transfer_details }}" class="form-control input-lg" readonly="true" >
+            </div>
+            <div class="form-group">
+                <label for="amount_paid">Amount Paid:</label>
+                <input type="text" name="amount_paid" value="{{ $alert_details[0]->amount_paid }}" class="form-control input-lg" readonly="true" >
+            </div>
+            <div class="form-group">
+                <label for="depositor_name">Depositor:</label>
+                <input type="text" name="depositor_name" value="{{ $alert_details[0]->depositor_name }}" class="form-control input-lg" readonly="true" >
+            </div>
+            <div class="form-group">
+                <label for="receipt">Receipt:</label>
+                <img style="width: 100%; max-height: 250PX" src="{{ asset('pm_receipt_uploads/'.$alert_details[0]->receipt_dir) }}" alt="receipt">
+            </div>
+            <div class="form-group">
+                <a href="{{ asset('/pm_receipt_uploads') }}/{{ $alert_details[0]->receipt_dir }}" download="true">
+                    {{ $alert_details[0]->receipt_dir }}
+                </a>
+            </div>
+        @else
+            <div class="form-group">
+                Payment alert has not been sent.
+            </div>
+        @endif
+    </div>
+</div>
+</div>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    <button type="submit" id="submit" class="btn btn-primary">{!! $page_action !!}</button>
+
+</div>
    {!! Form::close() !!}
 </div>
