@@ -85,7 +85,7 @@ $(function	()	{
 						var wallet = $('#wallet').val();
 						var paymentMethod = $('#payment_method').val();
 						var accountNo = $('#account_no').val();
-						var accountName = $('#account_name').val();
+						var accountName = $('#pm_account_name').val();
 
 						$('#unit_field').html(unit);
 						$('#total_unit_field').html(totalUnit);

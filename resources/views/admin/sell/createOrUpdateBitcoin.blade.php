@@ -40,6 +40,7 @@
 
   <li style="padding: 5px;" class="active"><a data-toggle="tab" href="#tab1">Company Account</a></li>
   <li style="padding: 5px;"><a data-toggle="tab" href="#tab2">Order Details</a></li>
+  <li style="padding: 5px;"><a data-toggle="tab" href="#tab3">Funding Details</a></li>
  
   </ul>
   <div class="tab-content">
@@ -132,6 +133,31 @@
       <div class="form-group" style="margin-top: 25px;">
           <input style="width:300px; height:35px" type="text" id="custom_status" name="custom_status">
       </div>
+  </div>
+
+  <div id="tab3" class="tab-pane fade">
+    @if(!empty($fund_details[0]))
+        <div class="form-group">
+            <label for="date_sent">Date Sent:</label>
+            <input type="text" name="date_sent" value="{{ $fund_details[0]->date_sent }}" class="form-control input-lg" readonly="true" >
+        </div>
+        <div class="form-group">
+            <label for="transaction_id">Transaction ID:</label>
+            <input type="text" name="transaction_id" value="{{ $fund_details[0]->hash }}" class="form-control input-lg" readonly="true" >
+        </div>
+        <div class="form-group">
+            <label for="amount_sent">Amount Sent:</label>
+            <input type="text" name="amount_sent" value="{{ $fund_details[0]->amount_sent }}" class="form-control input-lg" readonly="true" >
+        </div>
+        <div class="form-group">
+            <label for="wallet_address">Wallet Address:</label>
+            <input type="text" name="wallet_address" value="{{ $fund_details[0]->wallet_id }}" class="form-control input-lg" readonly="true" >
+        </div>
+    @else
+        <div class="form-group">
+            Funding alert has not been sent.
+        </div>
+    @endif
   </div>
 
 </div>

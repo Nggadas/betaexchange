@@ -15,6 +15,7 @@ use App\Models\BlogComment;
 use Illuminate\Mail\Mailer;
 use Illuminate\Mail\Message;
 use App\BankDetails;
+use App\notifyUser;
 use Mail;
 use GuzzleHttp\Client as GuzzleHttpClient;
 use GuzzleHttp\Exception\RequestException;
@@ -337,8 +338,14 @@ class HomeController extends Controller
     'price' =>$input['price1'] ,
     'total' =>$input['total']);
 
+          $sender_name = "info@betaexchangeng.com";
+          $subject = "Bitcoin new order!!";
+          $desc ="Thank you for ordering BitCoin with BetaExchangeNg.com. Please kindly visit Your mail for more information";
+          $title = "E-currency";
+          $this->notification($title, $sender_name, $subject, $desc);
+
      $this->send_verifycode($code);
-     $this->notify_sales($user,"Bitcoin", $input['account_name'], $input['account_no'], $input['bank_name'], $input['phone_no'], $input['email'], $input['unit'], $input['price1'], $input['total'], $ref_no, $walleT_id, $pm_account_no);
+     $this->notify_currency_sales('Bitcoins',$user,$ref_no,$admin_email,$email,$input['unit'],$input['price1'],$input['total'],$input['account_name'],$input['account_no'],$input['bank_name'],$wallet_id,$pm_account_no, $phone_no);
      
 
 
@@ -370,8 +377,15 @@ class HomeController extends Controller
     'price' =>$input['price1'] ,
     'total' =>$input['total']);
 
+    $sender_name = "info@betaexchangeng.com";
+    $subject = "PerfectMoney new order!!";
+    $desc ="Thank you for ordering PerfectMoney with BetaExchangeNg.com. Please kindly visit Your mail for more information";
+    $title = "E-currency";
+
+
+      $this->notification($title,$sender_name, $subject, $desc);
       $this->send_verifycode($code);
-     $this->notify_sales($user,"Perfect Money",$input['account_name'], $input['account_no'], $input['bank_name'], $input['phone_no'], $input['email'], $input['unit'], $input['price1'],$input['total'], $ref_no, $wallet_id=null, $pm_account_no);
+      $this->notify_currency_sales('Perfect Money',$user,$ref_no,$email,$admin_email,$input['unit'],$input['price1'],$input['total'],$input['account_name'],$input['account_no'],$input['bank_name'],$wallet_id = null,$pm_account_no, $phone_no);
 
    }
        }
@@ -507,6 +521,19 @@ class HomeController extends Controller
             return redirect()->back()->withErrors( "Unable to send emails. Pls try again") ->withInput();
             }
      }
+
+
+
+     private function notification($title,$sender_name, $subject, $desc) {
+        $message = notifyUser::create([
+              'user_id'=> Auth::user()->id,
+              'sender_name'=> $sender_name,
+              'subject'=> $subject,
+              'desc' => $desc,
+              'title' => $title
+        ]);
+      }
+  
 
 
      

@@ -178,7 +178,7 @@
                             <div class="row">
                                 <div class="col-md-4"></div>
                                 <div class="col-md-4">
-                                    <a href="{{ route('resetpassword') }}" class="btn btn-primary btn-block btn-lg">Change Password</a>
+                                    <a href="{{ route('resetpassword') }}" class="btn btn-primary btn-block">Change Password</a>
                                 </div>
                                 <div class="col-md-4"></div>
                             </div>

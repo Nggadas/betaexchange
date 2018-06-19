@@ -379,7 +379,7 @@ class UserController extends Controller
                 'date_sent'=> $request['date_sent'],
                 'batch_number'=> $request['batch_number'],
                 'amount_sent'=> $request['amount_sent'],
-                'wallet_id' => $request['wallet_id'],
+                'pm_account_no' => $request['wallet_id'],
                 'purchase_perfect_money_id' => $request['purchase_id']
          ]);
 

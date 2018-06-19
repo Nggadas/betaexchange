@@ -36,72 +36,133 @@ class NotifyUserController extends Controller
     }
 
 
-    public function viewBitcoin($id) {
-        //$data = BitCoin::find($id);
-        //dd($id);
-        $data['page_title'] = "BitCoin" ;
-        $data['buy_details'] = BitCoin::find($id);
-        $data['conf_details'] = Confirm_buy_bitcoins::where('bitcoin_id', $id)->get();
-        //dd($data);
-        return view('modals.bt_confirm_model', $data);
-    }
-
-    public function viewsellBitcoin($id) {
-        //$data = PurchaseBitCoin::find($id);
-        //dd($data);
-        $data['page_title'] = "Bitcoin";
-        $data['sale_details'] = PurchaseBitCoin::find($id);
-        $data['conf_details'] = Confirm_sell_bitcoin::where('purchase_bitcoins_id', $id)->get();
-        //dd($data);
-        return view('modals.bt_confirm_sells_modal', $data);
-    }
-
-    public function viewPm($id) {
-        $data['page_title'] = "Perfect Money";
-        $data['buy_pm'] = PerfectMoney::find($id);
-        $data['conf_details'] = Confirm_buy_pm::where('perfect_money_id', $id)->get();
-        //dd($data);
-
-        return view('modals.pm_confirm_modal', $data);
-    }
-
+    // for loading confirm pm sold
     public function confirm_sold($id) {
         $data['sold_pm'] = PurchasePerfectMoney::find($id);
-        //dd($data);
+        $conf_pmsells = Confirm_sell_pm::where('purchase_perfect_money_id', $id)->get();
+        if(empty($conf_pmsells[0])) {
+            $a = "Confirm Fund";
+        } else {
+            $a = "Confirmation Details";
+
+        }
+        $data['href'] = $a;
+        $data['conf_pmsells'] = Confirm_sell_pm::where('purchase_perfect_money_id', $id)->get();
         return view('modals.pm_sell_modal', $data);
     }
 
-    //  public function confirm_sold($id) {
-    //     $data['sold_pm'] = PerfectMoney::find($id);
-    //     //dd($data);
-    //     return view('modals.pm_modal', $data);
-    // }
-
+    
+    // for loading confirm buy pm
      public function Confirm_buypm($id) {
         $data['pm'] = PerfectMoney::find($id);
+        $conf_buypm = Confirm_buy_pm::where('perfect_money_id', $id)->get();
+        if(empty($conf_buypm[0])) {
+            $a = "Confirm Payment";
+        } else {
+            $a = "Confrimation Details";
+        }
+
+        $data['href'] = $a;
+        $data['conf_buypm'] = Confirm_buy_pm::where('perfect_money_id', $id)->get();
         //dd($data);
         return view('modals.pm_modals', $data);
     }
 
+    //for loading confirm buy bitcoin
     public function confirm_bit($id) {
-        $data['bit'] = BitCoin::find($id);
-        // dd($data);
+       
+        $data['buy_details'] = BitCoin::find($id);
+        $conf_details = Confirm_buy_bitcoins::where('bitcoin_id', $id)->get();
+        if (empty($conf_details[0])) {
+            $a = "Confirm Payment";
+        } else {
+            $a = "Payment details";
+        }
+        $data['href'] = $a;
+        $data['conf_buy'] = Confirm_buy_bitcoins::where('bitcoin_id', $id)->get();
+        
         return view('modals.bit_modal', $data);
     }
 
+    //for loading confirm bitcoin sold
      public function load_confirmbitsell($id) {
         $data['bitsell'] = PurchaseBitCoin::find($id);
-        //dd($data);
+        $conf_details = Confirm_sell_bitcoin::where('purchase_bitcoins_id', $id)->get();
+        if(empty($conf_details[0])) {
+            $a = "Confirm Fund";
+        } else {
+            $a = "Confirmation Details";
+        }
+        $data['href'] = $a;
+        $data['conf_sell_bit'] = Confirm_sell_bitcoin::where('purchase_bitcoins_id', $id)->get();
         return view('modals.bitsell_modal', $data);
     }
+    
+    //view the delete modal
+    public function delete_soldPM($id) {
+         $data['soldpm'] = PurchasePerfectMoney::find($id);
 
-    public function pm_details($id) {
-        $data['page_title'] = "Perfect Money";
-        $data['sold_pm'] = PurchasePerfectMoney::find($id);
-        //dd(PurchasePerfectMoney::find($id));
-        $data['conf_details'] = Confirm_sell_pm::where('purchase_perfect_money_id', $id)->get();
+         return view('modals.delete_soldPM', $data);
         
-
-        return view('modals.pmsell', $data);
+        
     }
+
+    //view the delete buymodal
+    public function delete_BuyPM($id) {
+         $data['buypm'] = PerfectMoney::find($id);
+
+         return view('modals.delete_buyPM', $data);
+
+    }
+
+    //view the delete buybitcoin
+    public function delete_Buybitcoin($id) {
+        $data['buybitcoin'] = Bitcoin::find($id);
+
+        return view('modals.delete_buyBitcoin', $data);
+
+    }
+
+    public function delete_Soldbitcoin($id) {
+        $data['soldbitcoin'] = PurchaseBitcoin::find($id);
+
+        return view('modals.delete_soldBitcoin', $data);
+    }
+
+    //delete the soldpm 
+    public function delete_sold_pm($id) {
+        $data = PurchasePerfectMoney::find($id);
+       $data->status = "cancelled";
+       $data->save();
+      
+       return redirect()->back()->with(['message' =>'Successfully Cancelled!']);
+    }
+
+    //delete the buypm
+    public function delete_buy_pm($id){
+        $data = PerfectMoney::find($id);
+        $data->status = "cancelled";
+        $data->save();
+      
+        return redirect()->back()->with(['message' =>'Successfully Cancelled!']);
+    }
+
+    public function delete_buy_bit($id) {
+        $data = Bitcoin::find($id);
+        $data->status = "cancelled";
+        $data->save();
+
+        return redirect()->back()->with(['message' =>'Successfully Cancelled!']);
+    }
+
+    public function delete_sold_bit($id) {
+        $data = PurchaseBitcoin::find($id);
+        $data->status = "cancelled";
+        $data->save();
+
+        return redirect()->back()->with(['message' =>'Successfully Cancelled!']);
+
+    }
+
+   
 }

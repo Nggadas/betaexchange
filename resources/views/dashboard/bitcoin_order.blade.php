@@ -16,6 +16,7 @@
 
             @if ($errors->any())
     <div class="alert alert-danger ">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <ul>
             @foreach ($errors->all() as $error)
                 <li>{{ $error }}</li>
@@ -37,13 +38,7 @@
 </ul>
 <div class="tab-content">
   <div id="home" class="tab-pane fade in active">
-                         @if (Session::has('message'))
-                             <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3"  role="alert">
-                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-
-                            {{ Session::get('message') }}
-                            </div>
-                            @endif
+                         
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             Bitcoin
@@ -60,13 +55,13 @@
                                     <tr>
                                         <th>Date</th>
                                         <th>Ref No</th>
-                                        <th>Wallet Address</th>
+                                        <th>Wallet ID</th>
                                         <th>Units</th>
                                         <th>Total</th>
                                         <th>Method</th>
                                         <th>Status</th>
-                                        <th width="5%" id="head_display">confirm payment</th>
-                                         <th width="5%" id="deletebtn">Delete</th>
+                                        <th width="5%">Confirm payment</th>
+                                         <th width="5%">Delete</th>
                                     </tr>
                                 </thead>
 
@@ -104,20 +99,33 @@
                         </td>
 
                          <td>
-                           {{ $bitcoin->payment_alert }}
+                           {{ $bitcoin->status }}
                          </td>
                          <td>
-                            @if($bitcoin->payment_alert == "not sent")
-                                <a id="confirm_payment"  role='button' data-edit-id='{!! $bitcoin->id!!}' class='btn btn-default confirm_payment' data-toggle="modal"><i class='fa fa-edit'></i>confirm payment</a>
-                            @elseif($bitcoin->status == "Canceled")
-                                <a  id="cancel" role='button' data-edit-id='{!! $bitcoin->id!!}' class='btn btn-danger' >Cancelled</a>
-                            @else    
-                                <a id="details"  role='button' data-edit-id='{!! $bitcoin->id!!}' class='btn btn-default editBtn' ><i class='fa fa-edit'></i>Details</a>
+                            @if ($bitcoin->payment_alert == "not sent" && $bitcoin->status == "cancelled")
+                            <a  id="cancel" role='button'  class='btn btn-danger canel' disabled="true" >Cancelled</a>
+                            @elseif($bitcoin->payment_alert == "alert sent" && $bitcoin->status == "cancelled")
+                            <a  id="cancel" role='button'  class='btn btn-danger canel' disabled="true" >Cancelled</a>
+                           @elseif ($bitcoin->payment_alert == "not sent")
+                            <a id="confirm_payment"  role='button' data-edit-id='{!! $bitcoin->id!!}' class='btn btn-primary confirm_payment' data-toggle="modal"><i class='fa fa-edit'>Confirm payment</i>
+                            </a>
+                            @elseif($bitcoin->payment_alert == "alert sent")
+                            <a id="detail" role='button' data-edit-id='{!! $bitcoin->id!!}' class='btn btn-primary  confirm_payment' data-toggle="modal"><i class='fa fa-edit'>Details</i>
+                            </a>
+                            
                            @endif
                          </td>
                         <td id="del">
-                            @if($bitcoin->payment_alert == "not sent")
-                                  <a href='#delete_modal' data-delete-id='{!! $bitcoin->id!!}' class='btn btn-danger deleteBtn' role='button' data-toggle='modal'><i class='fa fa-trash-o fa-lg'></i></a>
+                            @if ($bitcoin->payment_alert == "alert sent")
+                                <label id="na" class="btn btn-danger" disabled="true">N/A</label>
+                            @elseif($bitcoin->payment_alert == "alert sent" && $bitcoin->status == "cancelled")
+                                <label id="na" class="btn btn-danger" disabled="true">N/A</label>
+                            @endif
+                                
+                            @if($bitcoin->payment_alert == "not sent" && $bitcoin->status == "cancelled")
+                                <label id="na" class="btn btn-danger" disabled="true">N/A</label>
+                            @elseif($bitcoin->payment_alert =="not sent" )
+                                <a  data-edit-id='{!! $bitcoin->id!!}' class='btn btn-danger deleteBtn' role='button' data-toggle='modal'><i class='fa fa-trash-o fa-lg'></i></a>
                             @endif
                         </td>
                     </tr>
@@ -148,14 +156,12 @@
                                 <thead>
                                     <tr>
                                         <th>Date</th>
-                                        <th>Account Name</th>
-                                        <th>Account No</th>
-                                        <th>Bank Name</th>
-                                        <th>Phone</th>
+                                        <th>Wallet Address</th>
                                         <th>Units</th>
                                         <th>Price</th>
                                         <th>Total</th>
-                                        <th width="5%">Confirm sales</th>
+                                        <th>Status</th>
+                                        <th width="5%" id="cp">Confirm payment</th>
                                          <th width="5%" id="delete">Delete</th>
 
                                     </tr>
@@ -168,18 +174,9 @@
                          <td>
                           {!! $bitcoins->created_at->todatestring() !!}
                         </td>
-                        <td>
-                          {!! $bitcoins->account_name !!}
-                        </td>
-
-                        <td>
-                          {!! $bitcoins->account_no !!}
-                        </td>
-                        <td>
-                          {!! $bitcoins->bank_name !!}
-                        </td>
-                          <td>
-                          {!! $bitcoins->phone_no !!}
+                        
+                         <td>
+                          {!! $bitcoins->wallet_id !!}
                         </td>
                         <td>
                           {!! $bitcoins->unit !!}
@@ -190,18 +187,29 @@
                         <td>
                           {!! $bitcoins->total !!}
                         </td>
+                        <td>{!! $bitcoins->status !!}</td>
                          <td>
-                            @if($bitcoins->funding_alert == "not sent")
-                                <a id="confirm_bit_sell"   role='button' data-edit-id='{!! $bitcoins->id!!}' class='btn btn-default confirm_bit_sell' data-toggle="modal"><i class='fa fa-edit'></i>confirm fund</a>
-                            @elseif($bitcoins->status == "Canceled")
-                                <a id="cancel" role='button' data-edit-id='{!! $bitcoins->id!!}' class='btn btn-danger' ><i class='fa fa-edit'></i>Cancelled</a>
-                            @else    
-                                <a id="details2"  role='button' data-edit-id='{!! $bitcoins->id!!}' class='btn btn-default detailsBtn' ><i class='fa fa-edit'></i>Details</a>
+                            @if ($bitcoins->funding_alert == "not sent" && $bitcoins->status == "cancelled")
+                            <a  id="cancel" role='button'  class='btn btn-danger canel' disabled="true" >Cancelled</a>
+                                
+                            @elseif($bitcoins->funding_alert == "alert sent" && $bitcoins->status="cancelled")
+                            <a  id="cancel" role='button'  class='btn btn-danger canel' disabled="true" >Cancelled</a>
+                            @elseif($bitcoins->funding_alert == "not sent")
+                                <a id="confirm2"   role='button' data-edit-id='{!! $bitcoins->id!!}' class='btn btn-primary confirm_bit_sell' data-toggle="modal"><i class='fa fa-edit'></i>confirm fund</a>
+                            @elseif($bitcoins->funding_alert == "alert sent")    
+                                <a id="details2"  role='button' data-edit-id='{!! $bitcoins->id!!}' class='btn btn-primary confirm_bit_sell' ><i class='fa fa-edit'></i>Details</a>
                            @endif
                         </td>
                         <td id="delrow">
-                            @if($bitcoins->funding_alert == "not sent")
-                                <a href='#delete_bit_modal' data-delete-id='{!! $bitcoins->id!!}' class='btn btn-danger deleteBtn' role='button' data-toggle='modal'><i class='fa fa-trash-o fa-lg'></i></a>
+                            @if ($bitcoins->funding_alert == "alert sent")
+                                <label class="btn btn-danger" disabled="true">N/A</label>
+                            @elseif($bitcoins->funding_alert == 'alert sent' && $bitcoins->status == 'cancelled')
+                                <label id="na" class="btn btn-danger" disabled="true">N/A</label>
+                            @endif
+                            @if($bitcoins->funding_alert == "not sent" && $bitcoins->status == "cancelled")
+                                <label id="na" class="btn btn-danger" disabled="true">N/A</label>
+                            @elseif($bitcoins->funding_alert == "not sent")
+                                <a href='' data-edit-id='{!! $bitcoins->id!!}' class='btn btn-danger deleteBtn2' role='button' data-toggle='modal'><i class='fa fa-trash-o fa-lg'></i></a>
                             @endif
                         </td>
                        
@@ -244,8 +252,8 @@
     </div>
 </div>
 
-        @include('modals.bitcoins_modals')
-        @include('modals.bitcoin_sell_modal')
+        {{-- @include('modals.bitcoins_modals')
+        @include('modals.bitcoin_sell_modal') --}}
 
 </div>
 
@@ -255,29 +263,10 @@
     <script type="text/javascript">
         $(function () {
 
-          if($('#details').length) {
-            $('#head_display').html("Details");
-            $('#deletebtn').hide();
-            $('#del').hide();
-          }
+           
 
-
-           if($('#confirm_payment').length) {
-            $('#head_display').html("Confirm Payment");
-          }
-
-          if($('#details2').length) {
-            $('#delete').hide();
-            $('#delrow').hide();
-          }
-
-          if($('#cancel').length) {
-            $('#delete').hide();
-            $('#delrow').hide();
-            $('#del').hide();
-             $('#head_display').html("Details");
-             $('#deletebtn').hide();
-          }
+            
+          
 
               $('#bitcoin').DataTable({
                             "paging": true,
@@ -310,7 +299,7 @@
                             ]
                         });
 
-
+                        //load modal for sell bitcoin
                  $(".confirm_bit_sell").click(function () {
 
             $("#view_modal_body").load("load_confirmbitsell/" + $(this).data("edit-id"),function(responseTxt, statusTxt, xh)
@@ -324,37 +313,13 @@
             return false;
          });
 
-                //load sell details page
-                $(".detailsBtn").click(function () {
+               
+               
 
-            $("#view_modal_body").load("viewsellBitcoin/" + $(this).data("edit-id"),function(responseTxt, statusTxt, xh)
-                {
-                     $("#view_modal").modal({
-                                    backdrop: 'static',
-                                    keyboard: true
-                                }, "show");
-                               // bindForm(this);
-                });
-            return false;
-         });
+              
+               
 
-
-
-                //load buy bitcoin details page
-                $(".editBtn").click(function () {
-
-            $("#view_modal_body2").load("viewbitcoin/" + $(this).data("edit-id"),function(responseTxt, statusTxt, xh)
-                {
-                     $("#view_modal2").modal({
-                                    backdrop: 'static',
-                                    keyboard: true
-                                }, "show");
-                                //bindForm(this);
-                });
-            return false;
-         });
-
-                //buy
+                //load modal for buy bitcoin
                 $(".confirm_payment").click(function () {
 
             $("#view_modal_body2").load("confirm_bit/" + $(this).data("edit-id"),function(responseTxt, statusTxt, xh)
@@ -367,6 +332,37 @@
                 });
             return false;
          });
+
+
+         //delete buy bitcoin
+         $(".deleteBtn").click(function () {
+
+            $("#view_modal_body2").load("delete_buybitcoin/" + $(this).data("edit-id"),function(responseTxt, statusTxt, xh)
+                {
+                     $("#view_modal2").modal({
+                                    backdrop: 'static',
+                                    keyboard: true
+                                }, "show");
+                                //bindForm(this);
+                });
+            return false;
+         });
+
+
+         //delete sold bitcoin
+         $(".deleteBtn2").click(function () {
+
+            $("#view_modal_body2").load("delete_soldbitcoin/" + $(this).data("edit-id"),function(responseTxt, statusTxt, xh)
+                {
+                     $("#view_modal2").modal({
+                                    backdrop: 'static',
+                                    keyboard: true
+                                }, "show");
+                                //bindForm(this);
+                });
+            return false;
+         });
+
 
 
 

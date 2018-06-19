@@ -18,7 +18,14 @@
             @endforeach
         </ul>
     </div>
-    @endif
+	@endif
+	@if (Session::has('message'))
+	<div class="alert alert-info text-center" role="alert" style="width:50%;" align="center">
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+
+   {{ Session::get('message') }}
+   </div>
+   @endif
 
             <div class="row">
             	<div class="col-md-12">
@@ -37,27 +44,19 @@
 									<div class="panel-heading">
 			                           Perfect Money ordered
 			                        </div>
-			                        @if (Session::has('message'))
-			                         <div class="alert alert-info text-center" role="alert" style="width:50%;" align="center">
-			                             <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-
-			                        {{ Session::get('message') }}
-			                        </div>
-			                        @endif
+			                       
 			                        <div class="panel-body">
 			                        <table width="100%" class="table table-striped table-bordered table-hover" id="ordered_pm">
 			                        	<thead>
 			                        		<tr>
 			                        			<th>Date</th>
 			                        			<th>Ref No</th>
-			                        			<th>Account Name</th>
-			                        			<th>Account No</th>
 			                        			<th>Units</th>
 			                        			<th>Total</th>
 			                        			<th>Payment Method</th>
 		                                        <th>Status</th>
-                                        		<th width="5%" id="head_display">Details</th>
-                                         		<th width="5%" id="deletebtn"></th>
+                                        		<th id="cp">Confirm Payment</th>
+                                         		<th id="dd">Delete</th>
 			                        		</tr>
 			                        	</thead>
 			                        	<tbody>
@@ -67,8 +66,6 @@
 			                        				<tr>
 			                        					<td>{!! $pm_order->created_at->todatestring() !!}</td>
 			                        					<td>{!! $pm_order->ref_no !!}</td>
-			                        					<td>{!! $pm_order->account_name !!}</td>
-			                        					<td>{!! $pm_order->account_no !!}</td>
 			                        					<td>{!! $pm_order->unit !!}</td>
 			                        					<td>{!! $pm_order->total !!}</td>
 
@@ -83,25 +80,32 @@
 			                        					</td>                       						
 		                        						
 		                        						<td>
-	                        							@if($pm_order->status == 0)
-		                        							Processing
-		                        						@else
-		                        							Completed
-		                        						@endif
+	                        							{!! $pm_order->status !!}
 		                        						</td>
 
 		                        						<td>
-	                        							 @if($pm_order->payment_alert == "not sent")
-							                               <a    role='button' data-edit-id='{!! $pm_order->id!!}' class='btn btn-default confirm_payment' data-toggle="modal"><i class='fa fa-edit'></i>confirm payment</a>
-								                        @elseif($pm_order->status == "Canceled")
-							                                <a  id="canel" role="button"   role='button' class='btn btn-danger' data-toggle="modal" data-edit-id="{!! $pm_order->id !!}">Canelled</a>
-								                        @else    
-						                                <a  role='button' data-edit-id='{!! $pm_order->id!!}' class='btn btn-default details' ><i class='fa fa-edit '></i>Details</a>
+														 @if($pm_order->status== "cancelled" && $pm_order->payment_alert == "not sent")
+														 <a  id="canel" role="button"   role='button' class='btn btn-danger' data-toggle="modal"  disabled="true">Canelled</a>
+														  @elseif($pm_order->status== "cancelled" && $pm_order->payment_alert == "alert sent")
+														  <a  id="canel" role="button"   role='button' class='btn btn-danger' data-toggle="modal" disabled="true">Canelled</a>
+								                        @elseif($pm_order->payment_alert == "not sent")
+														<a role='button' data-edit-id='{!! $pm_order->id!!}' class='btn btn-primary confirm_payment' data-toggle="modal"><i class='fa fa-edit'></i>confirm payment</a>
+
+								                        @elseif($pm_order->payment_alert == "alert sent")    
+						                                <a  role='button' id="d2" data-edit-id='{!! $pm_order->id!!}' class='btn btn-primary details confirm_payment' ><i class='fa fa-edit '></i>Details</a>
 								                        @endif
 		                        						</td>
-									                    <td id="del">
-									                    	@if($pm_order->payment_alert == "not sent")
-									                       <a href='#delete_modal' data-delete-id='{!! $pm_order->id!!}' class='btn btn-danger deleteBtn' role='button' data-toggle='modal'><i class='fa fa-trash-o fa-lg'></i></a>
+									                    <td>
+															@if ($pm_order->payment_alert == "alert sent")
+															<a id="na" href="javascript:void(0)" role="button" class="btn btn-danger" disabled="true">N/A</a>
+															@elseif($pm_order->payment_alert == "alert sent" && $pm_order->status == "cancelled")
+															<a id="na" href="javascript:void(0)" role="button" class="btn btn-danger" disabled="true">N/A</a>
+															@endif
+
+															@if($pm_order->payment_alert == "not sent" && $pm_order->status == "cancelled")
+															<a id="na" href="javascript:void(0)" role="button" class="btn btn-danger" disabled="true">N/A</a>
+															@elseif($pm_order->payment_alert == "not sent")
+									                       <a role="button" data-edit-id='{!! $pm_order->id!!}' class='btn btn-danger deleteBtn' role='button' data-toggle='modal'><i class='fa fa-trash-o fa-lg'></i></a>
 									                       @endif
 									                      </td>
 		                        						
@@ -137,16 +141,12 @@
 			                        		<tr>
 			                        			<th>Date</th>
 			                        			<th>Ref No</th>
-			                        			<th>Account Name</th>
-			                        			<th>Account No</th>
-			                        			<th>Bank Name</th>
-			                        			<th>Email</th>
-			                        			<th>Phone No</th>
 			                        			<th>Price</th>
 			                        			<th>Units</th>
-			                        			<th>Total</th>
-			                        			<th width="5%">confirm sale</th>
-                                         		<th width="5%" id="delheader"></th>
+												<th>Total</th>
+												<th>Status</th>
+			                        			<th id="cs">Confirm sale</th>
+                                         		<th id="ds">Cancel sales</th>
 			                        			
 			                        		</tr>
 			                        	</thead>
@@ -154,29 +154,35 @@
 			                        		@if(count($pm_sold))
 			                        			@foreach($pm_sold as $pm)
 			                        			<tr>
-			                        				<td>{!! $pm->created_at->todatestring() !!}</td>
-			                        				<td>{!!$pm->ref_no !!}</td>
-			                        				<td>{!! $pm->account_name !!}</td>
-			                        				<td>{!! $pm->account_no !!}</td>
-			                        				<td>{!! $pm->bank_name !!}</td>
-			                        				<td>{!! $pm->email !!}</td>
-			                        				<td>{!! $pm->phone_no !!}</td>
-			                        				<td>{!! $pm->price !!}</td>
-			                        				<td>{!! $pm->unit !!}</td>
-			                        				<td>{!! $pm->total !!}</td>
-			                        				 <td>
-							                            @if($pm->funding_alert == "not sent")
-							                               <a role="button" id="confirm_sales_payment"  role='button' class='btn btn-default' data-toggle="modal" data-edit-id="{!! $pm->id !!}"><i class='fa fa-edit'></i>confirm sales</a>
-							                            @elseif($pm->status == "Canceled")
-							                                <a  id="canel" role="button"   role='button' class='btn btn-danger' data-toggle="modal" data-edit-id="{!! $pm->id !!}">Canelled</a>
+			                        				<td style="width:2%;">{!! $pm->created_at->todatestring() !!}</td>
+			                        				<td style="width:2%;">{!!$pm->ref_no !!}</td>
+			                        				<td style="width:2%;">{!! $pm->price !!}</td>
+			                        				<td style="width:2%;">{!! $pm->unit !!}</td>
+													<td style="width:2%;">{!! $pm->total !!}</td>
+													<td style="width:2%;">{!! $pm->status !!}</td>
+			                        				 <td style="width:2%;">
+							                            @if($pm->funding_alert == "not sent" && $pm->status == "cancelled")
+														   <a  id="canel2" role="button"   role='button' class='btn btn-danger' data-toggle="modal" data-edit-id="{!! $pm->id !!}" disabled="true">Canelled</a>
+														@elseif($pm->funding_alert == "alert sent" && $pm->status == "cancelled")
+															<a  id="canel2" role="button"   role='button' class='btn btn-danger' data-toggle="modal" data-edit-id="{!! $pm->id !!}" disabled="true">Canelled</a>
+							                            @elseif($pm->funding_alert == "not sent")
+														   <a role="button" id="c"  role='button' class='btn btn-primary confirm_sales_payment' data-toggle="modal" data-edit-id="{!! $pm->id !!}"><i class='fa fa-edit'></i>confirm sales</a>
 							                            @else    
-							                                <a  role="button" id=""  role='button' data-edit-id='{!! $pm->id !!}' class='btn btn-default details2' ><i class='fa fa-edit'></i>Details</a>
+							                                <a  role="button" id="d"  role='button' data-edit-id='{!! $pm->id !!}' class='btn btn-primary confirm_sales_payment' ><i class='fa fa-edit'></i>Details</a>
 							                           @endif
                          							</td>
 
-                         							 <td id="del">
-							                            @if($pm->funding_alert == "not sent")
-							                                  <a href='#delete_pm_modal' class='btn btn-danger deleteBtn' role='button' data-toggle='modal'><i class='fa fa-trash-o fa-lg'></i></a>
+                         							 <td style="width:2%;">
+														@if ($pm->funding_alert == "alert sent")
+															<a id="NA" href="javascript:void(0)" role="button" class="btn btn-danger" disabled="true">N/A</a>
+														@elseif($pm->funding_alert == "alert sent" && $pm->status == "cancelled")
+															<a id="NA" href="javascript:void(0)" role="button" class="btn btn-danger" disabled="true">N/A</a>
+														@endif
+														@if($pm->funding_alert == "not sent" && $pm->status == "cancelled")
+															<a id="NA" href="javascript:void(0)" role="button" class="btn btn-danger" disabled="true">N/A</a>
+														@elseif($pm->funding_alert == "not sent")
+															  <a role="button" class='btn btn-danger deleteBtn2' role='button' data-toggle='modal' data-edit-id="{!! $pm->id !!}"><i class='fa fa-trash-o fa-lg'></i></a>
+														
 							                            @endif
                         							</td>
 			                        			</tr>
@@ -221,7 +227,7 @@
     </div>
 </div>
 
-@include('modals.delete_modal')
+{{-- @include('modals.delete_modal') --}}
 
 	
 </div>
@@ -232,28 +238,11 @@
     <script type="text/javascript">
         $(function () {
 
-          if($('#details').length) {
-            $('#head_display').html("Details");
-            $('#deletebtn').hide();
-            $('#del').hide();
-          }
+			
 
 
-           if($('#confirm_payment').length) {
-            $('#head_display').html("Confirm Payment");
-          }
-
-          if ($('#details2').length) {
-          	$('#del_pm').hide();
-          	$('#delheader').hide();
-          }
-
-          if ($('#canel').length) {
-          	$('#del_pm').hide();
-          	$('#delheader').hide();
-          	 $('#head_display').html("Details");
-          	 $('#del').hide();
-          }
+			
+       
 
               $('#ordered_pm').DataTable({
                             "paging": true,
@@ -299,22 +288,9 @@
             return false;
          });
 
-                // load buy pm details modal
-                $(".details").click(function () {
+               
 
-            $("#view_modal_body").load("viewPm/" + $(this).data("edit-id"),function(responseTxt, statusTxt, xh)
-                {
-                     $("#view_modal").modal({
-                                    backdrop: 'static',
-                                    keyboard: true
-                                }, "show");
-                               // bindForm(this);
-                });
-            return false;
-         });
-
-
-                $("#confirm_sales_payment").click(function () {
+                $(".confirm_sales_payment").click(function () {
 
             $("#sold_modal_body").load("confirm_sold/" + $(this).data("edit-id"),function(responseTxt, statusTxt, xh)
                 {
@@ -326,13 +302,27 @@
                 });
             return false;
          });
+			 
+		 
+		 $(".deleteBtn2").click(function () {
 
-
-                $(".details2").click(function () {
-
-            $("#pm_body").load("pm_details/" + $(this).data("edit-id"),function(responseTxt, statusTxt, xh)
+            $("#sold_modal_body").load("delete_soldpm/" + $(this).data("edit-id"),function(responseTxt, statusTxt, xh)
                 {
-                     $("#buy_pm_modal").modal({
+                     $("#conf_sold_modal").modal({
+                                    backdrop: 'static',
+                                    keyboard: true
+                                }, "show");
+                               // bindForm(this);
+                });
+            return false;
+		 });
+		 
+		 $(".deleteBtn").click(function () {
+
+            $("#sold_modal_body").load("delete_buypm/" + $(this).data("edit-id"),function(responseTxt, statusTxt, xh)
+                {
+					
+                     $("#conf_sold_modal").modal({
                                     backdrop: 'static',
                                     keyboard: true
                                 }, "show");
@@ -340,6 +330,9 @@
                 });
             return false;
          });
+
+
+                
 
 
 

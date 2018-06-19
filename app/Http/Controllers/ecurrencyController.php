@@ -14,7 +14,7 @@ use App\Models\PerfectMoney;
 use App\Models\Price;
 use App\Helpers\Utility;
 use Illuminate\Support\Facades\Validator;
-//use App\BankDetails;
+use App\BankDetails;
 use App\Models\PurchaseBitCoin;
 use App\Models\PurchasePerfectMoney;
 use GuzzleHttp\Client as GuzzleHttpClient;
@@ -54,7 +54,8 @@ public function  buy_currency(Request $request) {
     		'email'=> $request['email'],
     		'password' => bcrypt($request['password']),
     		'phone_no'=> $request['phone_no'],
-    		'verify_code' => $code
+            'verify_code' => $code,
+            'user_id'=>$user_id
     	]);
     	Auth::login($user);
       
@@ -200,6 +201,10 @@ public function  buy_currency(Request $request) {
               }else if ($method == "3"){
                   $method = "Short Code";
               }
+
+              $bank_details=BankDetails::all();
+              $admin_email = $bank_details[0]->email;
+  
      
               $data['user']=$user;
               $data['units']=$units;
@@ -207,23 +212,24 @@ public function  buy_currency(Request $request) {
               $data['wallet_id']=$wallet_id;
               $data['total_units']=$total_units;
               $data['method']=$method;
+              $data['bank_details']= $bank_details;
+              $email = Auth::user()->email;
 
-             // $data['bank_details']= BankDetails::all();
-
+             
              //dd($data);
               //user
-             Mail::send('emails.buy_bitcoin_confirmation',$data, function($message)
+             Mail::send('emails.buy_bitcoin_confirmation',$data, function($message) use($email)
              {
-                 $message->to("anihuchenna16@gmail.com")
+                 $message->to($email)
                  ->bcc('info@betaexchangeng.com')
                  ->from('info@betaexchangeng.com')
                  ->subject('Bitcoin new order!!');
              });
 
              //admin
-             Mail::send('emails.buy_bitcoin',$data, function($message)
+             Mail::send('emails.buy_bitcoin',$data, function($message) use($admin_email)
              {
-                 $message->to("uchennaanih16@gmail.com")
+                 $message->to($admin_email)
                  ->bcc('info@betaexchangeng.com')
                  ->from('info@betaexchangeng.com')
                  ->subject('Bitcoin new order!!');
@@ -232,7 +238,7 @@ public function  buy_currency(Request $request) {
        
           }catch(\Exception $e){
             // throw $e;
-             return redirect()->back()->withErrors( "Unable to send emails. Pls try again") ->withInput();
+             return redirect()->back()->withErrors( "Unable to send emails. Pls check your messages") ->withInput();
           }
 
      }
@@ -242,10 +248,11 @@ public function  buy_currency(Request $request) {
 
       $data['user'] = Auth::user()->first_name;
       $data['verifycode'] = $verifycode;
+      $email = Auth::user()->email;
       //dd($data);
 
-        Mail::send('emails.verify_user', $data, function ($message){
-            $message->to('uchennaanih16@gmail.com')
+        Mail::send('emails.verify_user', $data, function ($message) use($email) {
+            $message->to($email)
               ->bcc('info@betaexchangeng.com')
                  ->from('info@betaexchangeng.com')
                  ->subject('Verification code');
@@ -269,6 +276,10 @@ public function  buy_currency(Request $request) {
                 $method = "Short Code";
             }
 
+            $bank_details=BankDetails::all();
+            $admin_email = $bank_details[0]->email;
+
+            
             $data['user']=$user;
             $data['units']=$units;
             $data['total_units']=$total_units;
@@ -276,22 +287,26 @@ public function  buy_currency(Request $request) {
             $data['account_name']=$account_name;
             $data['account_no']=$account_no;
             $data['method']=$method;
+            $data['bank_details']= $bank_details;
+            $email = Auth::user()->email;
 
+
+            
             //dd($data);
            // $data['bank_details']= BankDetails::all();
             //send mail to admin
-            Mail::send('emails.buy_perfect_money',$data, function($message)
+            Mail::send('emails.buy_perfect_money',$data, function($message) use($admin_email)
             {
-                  $message->to("uchennaanih16@gmail.com")
+                  $message->to($admin_email)
                   ->bcc('info@betaexchangeng.com')
                   ->from('info@betaexchangeng.com')
                   ->subject('Perfect Money new order!!');
             });
 
             //send mail to user
-            Mail::send('emails.buy_pm_confirmation',$data, function($message)
+            Mail::send('emails.buy_pm_confirmation',$data, function($message) use($email)
             {
-                  $message->to("anihuchenna16@gmail.com")
+                  $message->to($email)
                   ->bcc('info@betaexchangeng.com')
                   ->from('info@betaexchangeng.com')
                   ->subject('Perfect Money new order!!');
@@ -302,7 +317,7 @@ public function  buy_currency(Request $request) {
             catch(\Exception $e)
         {
             // throw $e;
-            return redirect()->back()->withErrors( "Unable to send emails. Pls try again") ->withInput();
+            return redirect()->back()->withErrors( "Unable to send emails. Pls check your message") ->withInput();
         }
 
     }

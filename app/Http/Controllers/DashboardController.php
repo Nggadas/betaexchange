@@ -20,6 +20,7 @@ use App\Models\PurchaseBitCoin;
 use App\Models\PurchasePerfectMoney;
 use GuzzleHttp\Client as GuzzleHttpClient;
 use GuzzleHttp\Exception\RequestException;
+use App\notifyUser;
 
 class DashboardController extends Controller
 {
@@ -86,6 +87,7 @@ class DashboardController extends Controller
                 return redirect()->back()->withErrors('Error on step 3: Account last name must match your betaexchange middle or last name.')->withInput();
             }
 
+            
             $this->save_account_details($user->id,$input['first_name'],$input['middle_name'],$input['last_name'],$input['acct_no'],$input['bank_name']);
         }
 
@@ -123,6 +125,11 @@ class DashboardController extends Controller
         ]);
 
          //$this->send_sms($user->phone_no,'Welcome to Betaexchangeng');
+         $sender_name = "info@betaexchangeng.com";
+          $subject = "Bitcoin new order!!";
+          $desc ="Thank you for ordering BitCoin with BetaExchangeNg.com. Please kindly visit Your mail for more information";
+          $title = "E-currency";
+          $this->notification($title, $sender_name, $subject, $desc);
         $this->notify_bitcoin_purchase($user,$input['units'],$ref_no,$input['wallet'],$input['total_units'],$input['payment_method'],$email);
  
          }
@@ -380,6 +387,13 @@ class DashboardController extends Controller
             'ref_no' => $ref_no
         ]);
 
+          $sender_name = "info@betaexchangeng.com";
+          $subject = "PerfectMoney new order!!";
+          $desc ="Thank you for ordering PerfectMoney with BetaExchangeNg.com. Please kindly visit Your mail for more information";
+          $title = "E-currency";
+
+
+        $this->notification($title,$sender_name, $subject, $desc);
         $this->notify_perfect_purchase($user,$input['units'],$ref_no,$input['pm_account_name'],$input['account_no'],$input['total_units'],$input['payment_method'],$email);
  
          }
@@ -473,5 +487,16 @@ class DashboardController extends Controller
       echo "ok";
 
     }
+
+    private function notification($title,$sender_name, $subject, $desc) {
+        $message = notifyUser::create([
+              'user_id'=> Auth::user()->id,
+              'sender_name'=> $sender_name,
+              'subject'=> $subject,
+              'desc' => $desc,
+              'title' => $title
+        ]);
+      }
+  
 
 }

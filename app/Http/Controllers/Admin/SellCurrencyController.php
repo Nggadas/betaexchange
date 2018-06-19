@@ -8,6 +8,8 @@ use App\Http\Controllers\Controller;
 use App\User;
 use Auth;
 use App\BankDetails;
+use App\Confirm_sell_bitcoin;
+use App\Confirm_sell_pm;
 use App\Helpers\Utility;
 use App\Models\BitCoin;
 use App\Models\PurchasePerfectMoney;
@@ -50,6 +52,7 @@ class SellCurrencyController extends Controller
       $data['perfect_money']=PurchasePerfectMoney::find($id);
       $data['bank_details']=BankDetails::all();
       $data['payment_status']=Utility::ActivationStatus();
+      $data['fund_details']=Confirm_sell_pm::where('purchase_perfect_money_id', $id)->get();
 
 
       return view('admin.sell.createOrUpdatePM',$data);
@@ -65,6 +68,7 @@ class SellCurrencyController extends Controller
       $data['bitcoin']=PurchaseBitCoin::find($id);
       $data['bank_details']=BankDetails::all();
       $data['payment_status']=Utility::ActivationStatus();
+      $data['fund_details']=Confirm_sell_bitcoin::where('purchase_bitcoins_id', $id)->get();
 
 
       return view('admin.sell.createOrUpdateBitcoin',$data);

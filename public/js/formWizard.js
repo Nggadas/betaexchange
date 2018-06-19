@@ -46,20 +46,20 @@ function nextPrev(n) {
 
    $('#wallet').on('keyup', function(){
 
-    if($('#wallet').val().length < 5) {
+    if($('#wallet').val().length < 26) {
       // 26
         $('#msg_error').show();
         $('#msg_error').html('invalid wallet address');
         $('#nextBtn').attr('disabled',true);
         //alert($('#wallet').val().length);
 
-      }  else if ($('#wallet').val().length > 5) {
+      }  else if ($('#wallet').val().length > 35) {
         //35
         $('#msg_error').show();
         $('#msg_error').html('invalid wallet');
         $('#nextBtn').attr('disabled',true);
 
-      } else if ($('#wallet').val().length == 5) {
+      } else if ($('#wallet').val().length == 35) {
         //35
         $('#msg_error').hide();
         // $('#ok').show();
