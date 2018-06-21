@@ -99,7 +99,7 @@
                                                     <label class="input">
                                                         <i class="icon-append fa fa-phone"></i>
                      {!! Form::text('phone_no', Input::old('phone_no'),['class' => 'form-control numericText','required' => "true",'placeholder' => "Should not exceed 11 digit*",
-        'tabindex'=>'6','maxlength'=>'11']) !!}
+        'tabindex'=>'6','pattern'=>".{11,}",'maxlength'=>'11']) !!}
                                                     </label>
                                                 </section>
                                                 <section class="col-xs-6">

@@ -98,7 +98,7 @@ public function register(Request $data)
       'middle_name.required' => 'Enter Middle Name',
       'email.email' => 'Enter a valid email address',
       'email.required' => 'Enter email address',
-      'confirm_password.required' => 'You need confirm password',
+      'confirm_password.required' => 'You need to confirm password',
       'password.required' => 'You need a password',
       'email.unique' => 'The email  '.' '. $data['email']. ' has already been taken. Please enter another email','next_first_name.required' => 'Enter Next of Kin First Name',
       'next_last_name.required' => 'Enter Next of Kin Last Name',

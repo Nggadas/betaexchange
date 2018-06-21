@@ -274,22 +274,36 @@ class HomeController extends Controller
         $data = $request->all();
         $code = $this->generate_code();
         $id = $this->user_id();
+        
         $user_id = $this->checkid($id);
         $ref_no = $this->getref_code();
         $bank_details = BankDetails::all();
         $wallet_id = $bank_details[0]['wallet_id'];
         $pm_account_no = $bank_details[0]['pm_account_no'];
+        $admin_email = $bank_details[0]['email'];
         //$verifycode = $this->generate_code();
         //dd($data);
 
     try {
         
+        //$messages = ['email.unique:users' => 'Email already exist, please login to your account to place your order'];
+
+        
     
     $input=$request->all();
+    $email = $request['email'];
+    $emailcheck = User::where('email', $email)->exists();
+    
+        if ($emailcheck) {
+            return redirect()->back()->withErrors('Email already exist, please login to your account to place your order')->withInput();
+        }
+
     $this->validate($request, [
         'email' => 'required|unique:users',
-        'phone_no'=>'required|unique:users|max:10',
-        'unit'=>'required'
+        'phone_no'=>'required|unique:users|max:11',
+        'unit'=>'required',
+        'password'=> 'required|confirmed',
+        'bank_name'=>'required'
         
     ]);
 
@@ -302,12 +316,12 @@ class HomeController extends Controller
         'phone_no'=> $input['phone_no'],
         'email'=>$input['email'],
         'verify_code' => $code,
+        'user_id'=> $user_id
         
    ]);
 
     Auth::login($saveUser);
 
-    if($saveUser){
 
    if($input["currency_type"]=="Bitcoin")
    {
@@ -345,7 +359,7 @@ class HomeController extends Controller
           $this->notification($title, $sender_name, $subject, $desc);
 
      $this->send_verifycode($code);
-     $this->notify_currency_sales('Bitcoins',$user,$ref_no,$admin_email,$email,$input['unit'],$input['price1'],$input['total'],$input['account_name'],$input['account_no'],$input['bank_name'],$wallet_id,$pm_account_no, $phone_no);
+     $this->notify_currency_sales('Bitcoins',$saveUser,$ref_no,$email,$admin_email,$input['unit'],$input['price1'],$input['total'],$input['account_name'],$input['account_no'],$input['bank_name'],$wallet_id,$pm_account_no, $input['phone_no']);
      
 
 
@@ -385,10 +399,10 @@ class HomeController extends Controller
 
       $this->notification($title,$sender_name, $subject, $desc);
       $this->send_verifycode($code);
-      $this->notify_currency_sales('Perfect Money',$user,$ref_no,$email,$admin_email,$input['unit'],$input['price1'],$input['total'],$input['account_name'],$input['account_no'],$input['bank_name'],$wallet_id = null,$pm_account_no, $phone_no);
+      $this->notify_currency_sales('Perfect Money',$saveUser,$ref_no,$email,$admin_email,$input['unit'],$input['price1'],$input['total'],$input['account_name'],$input['account_no'],$input['bank_name'],$wallet_id = null,$pm_account_no, $input['phone_no']);
 
    }
-       }
+       
    return redirect()->intended('dashboard/confirm_order');
 
      }
@@ -419,6 +433,8 @@ class HomeController extends Controller
             $data['phone_no'] = $phone_no;
             $data['wallet_id']=$wallet_id;
             $data['pm_account_no']=$pm_account_no;
+           
+            
 
             if ($wallet_id == null) {
                 $data['bitcoin_name'] = 'perfect money';
@@ -464,10 +480,11 @@ class HomeController extends Controller
 
       $data['user'] = Auth::user()->first_name;
       $data['verifycode'] = $verifycode;
+      $email = Auth::user()->email;
       //dd($data);
 
-        Mail::send('emails.verify_user', $data, function ($message){
-            $message->to('uchennaanih16@gmail.com')
+        Mail::send('emails.verify_user', $data, function ($message) use($email){
+            $message->to($email)
               ->bcc('info@betaexchangeng.com')
                  ->from('info@betaexchangeng.com')
                  ->subject('Verification code');
@@ -478,7 +495,9 @@ class HomeController extends Controller
         try
         {
             $bank_details=BankDetails::all();
-            $admin_email = $bank_details[0]->email;
+            $admin_email = $bank_details[0]['email'];
+            $email = Auth::user()->email;
+      //dd($data);
 
             $data['user']=$user;
             $data['ctype']=$ctype;
@@ -505,9 +524,9 @@ class HomeController extends Controller
 
 
             //user
-            Mail::send('emails.sell_ecurrency',$data, function($user)
+            Mail::send('emails.sell_e_currency_confirmation',$data, function($message) use($email)
             {
-            $message->to($user->email)
+            $message->to($email)
             ->bcc('info@betaexchangeng.com')
             ->from('info@betaexchangeng.com')
                 ->subject('Sell E-currency to us!!');

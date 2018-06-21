@@ -7,7 +7,7 @@
         <div class="about-main">
             <div class="about-top">
  <div class="alert alert-info text-center" style="margin-top: 20px">
-  <strong>Attention!</strong> If you did not receive  your verification code on your email,  please call the admin on (+234) 909-190-9346 or 0803-801-4771. Thanks.
+  <strong>Attention!</strong> If you did not receive  your verification code on your email,  please call the admin on (+234) 909-190-9346 Thanks.
 </div>
             </div>
          @if (count($errors) > 0)

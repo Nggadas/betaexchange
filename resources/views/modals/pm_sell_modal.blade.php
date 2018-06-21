@@ -1,3 +1,32 @@
+<script>
+        $('#error_msg').hide();
+        
+        $('#amount_sent').on('keyup', function (){
+            var total = parseInt($('#total').val());
+            var amount_sent = parseInt($('#amount_sent').val());
+    
+            console.log(total);
+            console.log(amount_sent);
+            
+            if(amount_sent < total){
+              $(this).css('border-color', 'red');
+              $('#submit').attr('disabled', true);
+              $('#error_msg').show();
+              $('#error_msg').html('Your amount sent is lower than expected.');
+    
+            }else if(amount_sent >= total){
+              $(this).css('border-color', 'green');
+              $('#submit').attr('disabled', false);
+              $('#error_msg').hide();
+            }else{
+              $(this).css('border-color', 'red');
+              $('#submit').attr('disabled', true);
+              $('#error_msg').show();
+              $('#error_msg').html('Enter the amount sent.');
+            }
+        });
+</script>
+
 <div class="modal-content">
   <div class="modal-header">
       <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -22,28 +51,31 @@
 
               <div class="form-group">
                   <label>Date Sent</label>
-                 <input type="date" class="form-control" placeholder="Payment Date(d-m-y)" name="date_sent" id="date_sent">
+                 <input type="date" class="form-control" placeholder="Payment Date(d-m-y)" name="date_sent" id="date_sent" required>
              </div>
 
              <input type="hidden" name="purchase_id" value="{!! $sold_pm->id !!}">
 
              <div class="form-group">
                   <label>Batch Number</label>
-                 <input type="text" class="form-control" name="batch_number" id="batch_number" placeholder="">
+                 <input type="text" class="form-control" name="batch_number" id="batch_number" placeholder="Enter batch number" required>
              </div>
+
+             <input type="hidden" value="{{ $total }}" id="total">
 
              <div class="form-group">
                  <label>Amount sent</label>
-                 <input type="text" class="form-control" name="amount_sent" id="amount_sent" placeholder="Amount sent">
+                 <input type="text" class="form-control" name="amount_sent" id="amount_sent" placeholder="Amount sent" required>
+                 <span style="margin-top:15px; margin-left:2px;"  class="text-danger" id="error_msg"></span>
              </div>
 
              <div class="form-group">
                  <label>PM account no</label>
-               <input type="text" class="form-control" name="wallet_id" id="wallet_id" placeholder="Enter your perfect money ac">
+               <input type="text" class="form-control" name="wallet_id" id="wallet_id" placeholder="Enter your perfect money ac" required>
              </div>
 
              <div class="form-group">
-                <input type="submit" name="confirm_btn" value="Submit" class="btn btn-primary">
+                <input type="submit" id="submit" name="confirm_btn" value="Submit" class="btn btn-primary">
             </div>
 
             </form>

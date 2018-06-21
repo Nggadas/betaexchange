@@ -22,6 +22,7 @@ use DB;
 use App\Confirm_sell_bitcoin;
 use App\Confirm_sell_pm;
 use App\notifyUser;
+use App\BankDetails;
 
 class UserController extends Controller
 {
@@ -174,42 +175,57 @@ class UserController extends Controller
         //dd($data);
         $path = 'receipt_uploads';
 
-             
+        $this->validate($request, [
+            'date' => 'required',
+            'details_no' => 'required',
+            'amount_paid' => 'required',
+            'depositor_name' => 'required',
+            'receipt_dir' => 'file|mimes:png,jpeg,pdf|max:2000'
+        ]);
 
-        if($request->hasFIle('receipt_dir')) {
+        if (!empty($request->file('receipt_dir'))) {
+            
             $image = $request->file('receipt_dir');
             $filename = $image->getClientOriginalName();
-             $fileExtension = $image->getClientOriginalExtension();
-             $newfilename = Auth::user()->id . "." . $filename;
-
-              // dd($request['purchase_id']);
-             $save = Confirm_buy_bitcoins::create([
-                'user_id' => Auth::user()->id,
-                'date_sent'=> $request['date'],
-                'transfer_details'=> $request['details_no'],
-                'amount_paid'=>$request['amount_paid'],
-                'depositor_name'=>$request['depositor_name'],
-                'receipt_dir'=> $newfilename,
-                'bitcoin_id'=>$request['purchase_id']
-             ]);
-
-             $bitcoin_id = $request['purchase_id'];
-
-             if($save) {
-                $sender_name = "BetaexchangeNg";
-                $subject = "Confirm Bitcoin Payment!!";
-                $desc ="Thanks for confirming your order, Your order is been processed...";
-                $title = "BitCoin Payment Alert";
-
-                $image->move($path, $newfilename);
-                 $this->notice($title, $sender_name, $subject, $desc);
-                $this->bitcoin_alert_status($bitcoin_id);
-                $this->send_bitcoin_alert($request['date'], $request['details_no'], $request['amount_paid'],$request['depositor_name'], $newfilename);
+            $fileExtension = $image->getClientOriginalExtension();
+            $newfilename = Auth::user()->id . "." . $filename;
             
-             }
-                
         } else {
-            return redirect()->back()->with(['message'=>'upload receipt']);
+            $image = null;
+            $filename = null;
+            $fileExtension = null;
+            $newfilename = null;
+        }
+        
+
+        // dd($request['purchase_id']);
+        $save = Confirm_buy_bitcoins::create([
+        'user_id' => Auth::user()->id,
+        'date_sent'=> $request['date'],
+        'transfer_details'=> $request['details_no'],
+        'amount_paid'=>$request['amount_paid'],
+        'depositor_name'=>$request['depositor_name'],
+        'receipt_dir'=> $newfilename,
+        'bitcoin_id'=>$request['purchase_id']
+        ]);
+
+        $bitcoin_id = $request['purchase_id'];
+
+        if($save) {
+        $sender_name = "BetaexchangeNg";
+        $subject = "Confirm Bitcoin Payment!!";
+        $desc ="Thanks for confirming your order, Your order is been processed...";
+        $title = "BitCoin Payment Alert";
+
+
+        if (!empty($request->file('receipt_dir'))) {
+            $image->move($path, $newfilename);
+        }
+
+        $this->notice($title, $sender_name, $subject, $desc);
+        $this->bitcoin_alert_status($bitcoin_id);
+        $this->send_bitcoin_alert($request['date'], $request['details_no'], $request['amount_paid'],$request['depositor_name']);
+    
         }
         
         return redirect()->back()->with(['message'=>'we will get back to you']);
@@ -227,87 +243,128 @@ class UserController extends Controller
             'details_no' => 'required',
             'amount_paid' => 'required',
             'depositor_name' => 'required',
-            'receipt_dir' => 'required|file|mimes:png,jpeg,pdf|max:2000'
+            'receipt_dir' => 'file|mimes:png,jpeg,pdf|max:2000'
         ]);
 
-        if($request->hasFIle('receipt_dir')) {
+        if(!empty($request->file('receipt_dir'))){
             $image = $request->file('receipt_dir');
             $filename = $image->getClientOriginalName();
-             $fileExtension = $image->getClientOriginalExtension();
-             $newfilename = Auth::user()->id . "_" . $filename;
-
-
-             $save = Confirm_buy_pm::create([
-                'user_id' => Auth::user()->id,
-                'date_sent'=> $request['date'],
-                'details_no'=> $request['details_no'],
-                'amount_paid'=>$request['amount_paid'],
-                'depositor_name'=>$request['depositor_name'],
-                'receipt_dir'=> $newfilename,
-                'perfect_money_id' => $request['purchase_id']
-             ]);
-
-             if($save) {
-                 $sender_name = "betaexchangeng";
-                $subject = "Confirm Perfect Money Payment!!";
-                $desc ="Thanks for confirming your order, Your order is been processed...";
-                $title = "Perfect Money Payment Alert";
-
-                $image->move($path, $newfilename);
-                 $this->notice($title, $sender_name, $subject, $desc);
-                $this->pm_alert_status($request['purchase_id']);
-                $this->send_pm_alert($request['date'], $request['details_no'], $request['amount_paid'],$request['depositor_name'], $newfilename);
-
-             }
-                
-        } else {
-            return redirect()->back()->with(['message'=>'upload receipt']);
+            $fileExtension = $image->getClientOriginalExtension();
+            $newfilename = Auth::user()->id . "_" . $filename;
+        }else{
+            $image = null;
+            $filename = null;
+            $fileExtension = null;
+            $newfilename = null;
         }
-        
+
+
+        $save = Confirm_buy_pm::create([
+            'user_id' => Auth::user()->id,
+            'date_sent'=> $request['date'],
+            'details_no'=> $request['details_no'],
+            'amount_paid'=>$request['amount_paid'],
+            'depositor_name'=>$request['depositor_name'],
+            'receipt_dir'=> $newfilename,
+            'perfect_money_id' => $request['purchase_id']
+        ]);
+
+        $sender_name = "betaexchangeng";
+        $subject = "Confirm Perfect Money Payment!!";
+        $desc ="Thanks for confirming your order, Your order is been processed...";
+        $title = "Perfect Money Payment Alert";
+
+
+        if(!empty($request->file('receipt_dir'))){
+            $image->move($path, $newfilename);
+        }
+        $this->notice($title, $sender_name, $subject, $desc);
+        $this->pm_alert_status($request['purchase_id']);
+        $this->send_pm_alert($request['date'], $request['details_no'], $request['amount_paid'],$request['depositor_name']);
+
         return redirect()->back()->with(['message'=>'we will get back to you']);
 
     }
 
 
-    private function send_bitcoin_alert($date, $details_no, $amount_paid, $depositor_name,$filename) {
+    private function send_bitcoin_alert($date, $details_no, $amount_paid, $depositor_name) {
 
-        $data['user'] = \Auth::user();
-        $data['date'] = $date;
-        $data['details_no'] = $details_no;
-        $data['amount_paid'] = $amount_paid;
-        $data['depositor_name'] = $depositor_name;
-        $data['receipt_dir'] = $filename;
+        try{
+            
+            $data['user'] = \Auth::user();
+            $data['date'] = $date;
+            $data['details_no'] = $details_no;
+            $data['amount_paid'] = $amount_paid;
+            $data['depositor_name'] = $depositor_name;
+            $email = Auth::user()->email;
+            $bank_details = BankDetails::all();
+            $admin_email = $bank_details[0]['email'];
+            
+    
+            //dd($data);
+    
+             Mail::send('emails.bitcoin_alert',$data, function($message) use($admin_email)
+                 {
+                     $message->to($admin_email)
+                     ->bcc('info@betaexchangeng.com')
+                     ->from('info@betaexchangeng.com')
+                     ->subject('Confirmation of order!!');
+                 });
+    
+            
+            Mail::send('emails.bitcoinconfirm',$data, function($message) use($email)
+                 {
+                     $message->to($email)
+                     ->bcc('info@betaexchangeng.com')
+                     ->from('info@betaexchangeng.com')
+                     ->subject('Confirmation of order!!');
+                 });
+        
+        }catch(\Exception $e){
+            // throw $e;
+            return redirect()->back()->withErrors( "Unable to send emails. Pls try again") ->withInput();
+        }
 
-        //dd($data);
-
-         Mail::send('emails.bitcoin_alert',$data, function($message)
-             {
-                 $message->to("anihuchenna16@gmail.com")
-                 ->bcc('info@betaexchangeng.com')
-                 ->from('info@betaexchangeng.com')
-                 ->subject('Confirmation of order!!');
-             });
     }
 
 
-    private function send_pm_alert($date, $details_no, $amount_paid, $depositor_name,$filename) {
+    private function send_pm_alert($date, $details_no, $amount_paid, $depositor_name) {
 
-        $data['user'] = \Auth::user();
-        $data['date'] = $date;
-        $data['details_no'] = $details_no;
-        $data['amount_paid'] = $amount_paid;
-        $data['depositor_name'] = $depositor_name;
-        $data['receipt_dir'] = $filename;
+        try{
 
-        //dd($data);
-
-         Mail::send('emails.pm_alert',$data, function($message)
-             {
-                 $message->to("anihuchenna16@gmail.com")
-                 ->bcc('info@betaexchangeng.com')
-                 ->from('info@betaexchangeng.com')
-                 ->subject('Confirmation of order!!');
-             });
+            $data['user'] = \Auth::user();
+            $data['date'] = $date;
+            $data['details_no'] = $details_no;
+            $data['amount_paid'] = $amount_paid;
+            $data['depositor_name'] = $depositor_name;
+            $email = Auth::user()->email;
+            $bank_details = BankDetails::all();
+            $admin_email = $bank_details[0]['email'];
+    
+    
+            //dd($data);
+    
+             Mail::send('emails.pm_alert',$data, function($message) use($admin_email)
+                 {
+                     $message->to($admin_email)
+                     ->bcc('info@betaexchangeng.com')
+                     ->from('info@betaexchangeng.com')
+                     ->subject('Confirmation of order!!');
+                 });
+    
+            //user
+            Mail::send('emails.pmconfirm',$data, function($message) use($email)
+                 {
+                     $message->to($email)
+                     ->bcc('info@betaexchangeng.com')
+                     ->from('info@betaexchangeng.com')
+                     ->subject('Confirmation of order!!');
+                 });
+        
+        }catch(\Exception $e){
+            // throw $e;
+            return redirect()->back()->withErrors( "Unable to send emails. Pls try again") ->withInput();
+        }
     }
 
     private function bitcoin_alert_status($id) {
@@ -355,7 +412,7 @@ class UserController extends Controller
              $sender_name = "info@betaexchangeng.com";
             $subject = "Confirm Sold Bitcoin!!";
             $desc ="Thanks for confirming sold BitCoin, Your sells is been processed...";
-           $this->update_bitsell_alert();
+           $this->update_bitsell_alert($request['purchase_id']);
             $title = "Fund BitCoins Alert";
             $this->notice($title,$sender_name, $subject, $desc);
             $this->send_email($title,$request['date_sent'], $request['hash'], $request['amount_sent'], $request['wallet_id']);
@@ -390,7 +447,7 @@ class UserController extends Controller
            // $this->update_pmsell_alert();
             $title = "Fund PerfectMoney Alert";
             $this->notice($title, $sender_name,$subject,$desc);
-             $this->update_pmsell_alert();
+             $this->update_pmsell_alert($request['purchase_id']);
             $this->send_email($title, $request['date_sent'], $request['batch_number'], $request['amount_sent'], $request['wallet_id']);
          }
 
@@ -400,22 +457,22 @@ class UserController extends Controller
     }
 
 
-    private function update_bitsell_alert() {
-        $id = Auth::user()->id;
+    private function update_bitsell_alert($id) {
+        
         // $status = BitCoin::find($id);
         // $status->payment_alert = "Alert sent";
-        $status = DB::table("purchase_bitcoins")->where('user_id', $id)
+        $status = DB::table("purchase_bitcoins")->where('id', $id)
                         ->update([
                             'funding_alert'=> "alert sent"
                         ]);
        
     }
 
-    private function update_pmsell_alert() {
-        $id = Auth::user()->id;
+    private function update_pmsell_alert($id) {
+        
         // $status = BitCoin::find($id);
         // $status->payment_alert = "Alert sent";
-        $status = DB::table("purchase_perfect_money")->where('user_id', $id)
+        $status = DB::table("purchase_perfect_money")->where('id', $id)
                         ->update([
                             'funding_alert'=> "alert sent"
                         ]);
@@ -424,21 +481,39 @@ class UserController extends Controller
 
 
     private function send_email($title, $date_sent, $hash, $amount_sent, $wallet_id) {
-        $data['user'] = \Auth::user();
-        $data['title'] = $title;
-        $data['date_sent'] = $date_sent;
-        $data['hash'] = $hash;
-        $data['amount_sent'] = $amount_sent;
-        $data['wallet_id']=$wallet_id;
 
-        //admin
-        Mail::send('emails.alert',$data, function($message)
-             {
-                 $message->to("anihuchenna16@gmail.com")
-                 ->bcc('info@betaexchangeng.com')
-                 ->from('info@betaexchangeng.com')
-                 ->subject('Confirmation of order!!');
-             });
+        try{
+            $data['user'] = \Auth::user();
+            $data['title'] = $title;
+            $data['date_sent'] = $date_sent;
+            $data['hash'] = $hash;
+            $data['amount_sent'] = $amount_sent;
+            $data['wallet_id']=$wallet_id;
+            $email = Auth::user()->email;
+            $bank_details = BankDetails::all();
+            $admin_email = $bank_details[0]['email'];
+    
+            //admin
+            Mail::send('emails.alert',$data, function($message) use($admin_email)
+                 {
+                     $message->to($admin_email)
+                     ->bcc('info@betaexchangeng.com')
+                     ->from('info@betaexchangeng.com')
+                     ->subject('Confirmation of order!!');
+                 });
+                 //user
+            Mail::send('emails.bitconfirm',$data, function($message) use($email)
+                 {
+                     $message->to($email)
+                     ->bcc('info@betaexchangeng.com')
+                     ->from('info@betaexchangeng.com')
+                     ->subject('Confirmation of order!!');
+                 });
+        
+        }catch(\Exception $e){
+            // throw $e;
+            return redirect()->back()->withErrors( "Unable to send emails. Pls try again") ->withInput();
+        }
     }
 
 

@@ -22,11 +22,11 @@ $(document).ready(function()
 
         $(function () {
     $('#units').keyup(function () {
-    var price= parseFloat($("#unit_price").val()) || 0;
-    var units=  parseFloat($("#units").val()) || 0;
-    var total=  (price * units);
-    var total=  Math.ceil(total);
-    $("#total_units").val(total);
+        var price= parseFloat($("#unit_price").val()) || 0;
+        var units=  parseFloat($("#units").val()) || 0;
+        var total=  (price * units);
+        var total=  Math.ceil(total);
+        $("#total_units").val(total);
     });
 
 

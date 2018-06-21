@@ -162,7 +162,7 @@
             <div class="form-group">
               <label class="control-label col-sm-4">Confirm Password</label>
               <div class="col-sm-12">
-                <input type="password" name="confirm_password" id="confirm_password" class="form-control" required>
+                <input type="password" name="password_confirmation" id="confirm_password" class="form-control" required>
               </div>
             </div>
             </div>

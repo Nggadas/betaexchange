@@ -238,12 +238,6 @@
     <script type="text/javascript">
         $(function () {
 
-			
-
-
-			
-       
-
               $('#ordered_pm').DataTable({
                             "paging": true,
                             "lengthChange": true,
@@ -275,69 +269,63 @@
                             ]
                         });
 
-		$(".confirm_payment").click(function () {
+			$(".confirm_payment").click(function () {
 
-            $("#view_modal_body").load("confirm_buypm/" + $(this).data("edit-id"),function(responseTxt, statusTxt, xh)
-                {
-                     $("#view_modal").modal({
-                                    backdrop: 'static',
-                                    keyboard: true
-                                }, "show");
-                               // bindForm(this);
-                });
-            return false;
-         });
+				$("#view_modal_body").load("confirm_buypm/" + $(this).data("edit-id"),function(responseTxt, statusTxt, xh)
+					{
+						$("#view_modal").modal({
+										backdrop: 'static',
+										keyboard: true
+									}, "show");
+								// bindForm(this);
+					});
+				return false;
+			});
 
-               
+				
 
-                $(".confirm_sales_payment").click(function () {
+					$(".confirm_sales_payment").click(function () {
 
-            $("#sold_modal_body").load("confirm_sold/" + $(this).data("edit-id"),function(responseTxt, statusTxt, xh)
-                {
-                     $("#conf_sold_modal").modal({
-                                    backdrop: 'static',
-                                    keyboard: true
-                                }, "show");
-                               // bindForm(this);
-                });
-            return false;
-         });
-			 
-		 
-		 $(".deleteBtn2").click(function () {
+				$("#sold_modal_body").load("confirm_sold/" + $(this).data("edit-id"),function(responseTxt, statusTxt, xh)
+					{
+						$("#conf_sold_modal").modal({
+										backdrop: 'static',
+										keyboard: true
+									}, "show");
+								// bindForm(this);
+					});
+				return false;
+			});
+				
+			
+			$(".deleteBtn2").click(function () {
 
-            $("#sold_modal_body").load("delete_soldpm/" + $(this).data("edit-id"),function(responseTxt, statusTxt, xh)
-                {
-                     $("#conf_sold_modal").modal({
-                                    backdrop: 'static',
-                                    keyboard: true
-                                }, "show");
-                               // bindForm(this);
-                });
-            return false;
-		 });
-		 
-		 $(".deleteBtn").click(function () {
+				$("#sold_modal_body").load("delete_soldpm/" + $(this).data("edit-id"),function(responseTxt, statusTxt, xh)
+					{
+						$("#conf_sold_modal").modal({
+										backdrop: 'static',
+										keyboard: true
+									}, "show");
+								// bindForm(this);
+					});
+				return false;
+			});
+			
+			$(".deleteBtn").click(function () {
 
-            $("#sold_modal_body").load("delete_buypm/" + $(this).data("edit-id"),function(responseTxt, statusTxt, xh)
-                {
-					
-                     $("#conf_sold_modal").modal({
-                                    backdrop: 'static',
-                                    keyboard: true
-                                }, "show");
-                               // bindForm(this);
-                });
-            return false;
-         });
+				$("#sold_modal_body").load("delete_buypm/" + $(this).data("edit-id"),function(responseTxt, statusTxt, xh)
+					{
+						
+						$("#conf_sold_modal").modal({
+										backdrop: 'static',
+										keyboard: true
+									}, "show");
+								// bindForm(this);
+					});
+				return false;
+			});
 
-
-                
-
-
-
-
-        });
+		});
 
         </script>
 @stop

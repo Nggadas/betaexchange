@@ -189,11 +189,11 @@
                         </td>
                         <td>{!! $bitcoins->status !!}</td>
                          <td>
-                            @if ($bitcoins->funding_alert == "not sent" && $bitcoins->status == "cancelled")
-                            <a  id="cancel" role='button'  class='btn btn-danger canel' disabled="true" >Cancelled</a>
+                            @if ($bitcoins->funding_alert == "not sent" && $bitcoins->status == "Canceled")
+                                <a  id="cancel" role='button'  class='btn btn-danger canel' disabled="true" >Cancelled</a>
                                 
-                            @elseif($bitcoins->funding_alert == "alert sent" && $bitcoins->status="cancelled")
-                            <a  id="cancel" role='button'  class='btn btn-danger canel' disabled="true" >Cancelled</a>
+                            @elseif($bitcoins->funding_alert == "alert sent" && $bitcoins->status=="Canceled")
+                                <a  id="cancel" role='button'  class='btn btn-danger canel' disabled="true" >Cancelled</a>
                             @elseif($bitcoins->funding_alert == "not sent")
                                 <a id="confirm2"   role='button' data-edit-id='{!! $bitcoins->id!!}' class='btn btn-primary confirm_bit_sell' data-toggle="modal"><i class='fa fa-edit'></i>confirm fund</a>
                             @elseif($bitcoins->funding_alert == "alert sent")    

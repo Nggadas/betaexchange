@@ -48,7 +48,7 @@
                     <p>Solaron Plaza Suite B22,  </p>
                      <p>15/17 akowonjo road, </p>
                      <p>Egbeda, Lagos</p>
-                      <p>+234-909-190-9346, +234-803-801-4771</p>
+                      <p>+234-909-190-9346</p>
                     <p><a href="mailto:info@betaexchangeng.com">info@betaexchangeng.com</a></p>
                 </div>
               

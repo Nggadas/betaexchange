@@ -76,7 +76,7 @@
                                 </form>    
                             </div>
                             <div class="form-footer">
-                                <p><a href="{{ route('register') }}">Register</a></p>
+                                <p>Don&apos;t have an account? <a style="color: #3498db;" href="{{ route('register') }}">Click here to register.</a></p>
                             </div>
                         </div>
                     </div>

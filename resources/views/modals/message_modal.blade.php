@@ -12,7 +12,7 @@
               <br><br>
               <p>Regards,</p>
               <p>BetaExchangeNg</p>
-              <p>Tel: 0909-190-9346, 0803-801-4771. </p>
+              <p>Tel: 0909-190-9346.</p>
               <p>WhatsApp: 0909-190-9346 </p>
               <p>Website:  <a href="www.betaexchangeng.com"> www.betaexchangeng.com</a></p>
           </div>

@@ -157,7 +157,7 @@
                          "responsive":true,
                         "info": true,
                         "autoWidth": true,
-                        "order": [['created_at', "desc"]],
+                        "order": [[0, "desc"]],
                         dom: 'Bfltip',
                         buttons: [
                             'copy', 'csv', 'excel', 'pdf', 'print'

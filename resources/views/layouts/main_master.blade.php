@@ -88,7 +88,7 @@ s0.parentNode.insertBefore(s1,s0);
           <div class="pull-left">
             <div class="header-item"><font size="2px" color="#00000"><a href="https://api.whatsapp.com/send?phone=2349091909346&text=Hello Betaexchangeng"><b><i class="fa fa-whatsapp" aria-hidden="true"></i><b>Whatsapp Chat</b></a></font></div>
                 <div class="header-item"><font size="2px" color="#00000"><i class="fa fa-envelope"></i>info@betaexchangeng.com</font></div>
-                <div class="header-item"><font size="2px" color="#00000"><i class="fa fa-phone"></i> <a href="tel:+234-909-190-9346" title="Call Us">0909-190-9346</a>, <a href="tel:+234-803-801-4771" title="Call Us">0803-801-4771</a></font></div>
+                <div class="header-item"><font size="2px" color="#00000"><i class="fa fa-phone"></i> <a href="tel:+234-909-190-9346" title="Call Us">0909-190-9346</a></font></div>
             </div>
             <div class="pull-right">
               <ul class="brands brands-inline brands-tn brands-circle main">
@@ -145,7 +145,6 @@ s0.parentNode.insertBefore(s1,s0);
                       <li><a href="{{ url('buy') }}" data-hover="How to Buy">Buy E-Currency</a></li>
                       <li><a href="{{ url('contact') }}" data-hover="Contact">Contact</a></li> 
                       <li><a href="{{ url('/login') }}" data-hover="login">Signin</a></li>
-                      <li><a href="{{ url('/register') }}" data-hover="register">Register</a></li>
                   @endif 
               </ul>
             </div>
@@ -174,7 +173,7 @@ s0.parentNode.insertBefore(s1,s0);
                         <li><b>info@betaexchangeng.com</b></li>
                         <li>15/17 akowonjo road,</li>
                         <li>Egbeda, Lagos</li>
-                        <li><b>+234 809 519 3030, +234 803 801 4771</b></li>
+                        <li><b>+234 809 519 3030</b></li>
                     </ul>
                 </div>
                 

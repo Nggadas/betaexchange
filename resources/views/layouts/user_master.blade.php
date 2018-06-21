@@ -77,7 +77,7 @@ s0.parentNode.insertBefore(s1,s0);
       <div class="container">
           <div class="pull-left">
               <div class="header-item"><i class="fa fa-envelope"></i>info@betaexchangeng.com</div>
-                <div class="header-item"><i class="fa fa-phone"></i> (+234) 809-519-3030 , 08038014771</div>
+                <div class="header-item"><i class="fa fa-phone"></i> (+234) 809-519-3030</div>
             </div>
             <div class="pull-right">
               <ul class="brands brands-inline brands-tn brands-circle main">
@@ -161,7 +161,7 @@ s0.parentNode.insertBefore(s1,s0);
                         <li><a>info@betaexchangeng.com</a></li>
                         <li>15/17 akowonjo road,</li>
                         <li>Egbeda, Lagos</li>
-                        <li>+234 809 519 3030, +234 803 801 4771</li>
+                        <li>+234 809 519 3030</li>
                     </ul>
                 </div>
 

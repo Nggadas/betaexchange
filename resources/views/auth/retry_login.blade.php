@@ -7,7 +7,7 @@
         <div class="about-main">
             <div class="about-top">
                 <div class="alert alert-danger text-center" style="margin-top: 20px">
-                  Your account has been deactivated,  please call the admin on (+234) 909-190-9346 or 0803-801-4771. Thanks.
+                  Your account has been deactivated,  please call the admin on (+234) 909-190-9346 Thanks.
                 </div>
             </div>
 @if (session('warning'))

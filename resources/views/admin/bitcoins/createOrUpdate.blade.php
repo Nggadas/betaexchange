@@ -187,13 +187,17 @@
             <input type="text" name="depositor_name" value="{{ $alert_details[0]->depositor_name }}" class="form-control input-lg" readonly="true" >
         </div>
         <div class="form-group">
-            <label for="receipt">Receipt:</label>
-            <img style="width: 100%; max-height: 250PX" src="{{ asset('receipt_uploads/'.$alert_details[0]->receipt_dir) }}" alt="receipt">
-        </div>
-        <div class="form-group">
-            <a href="{{ asset('/receipt_uploads') }}/{{ $alert_details[0]->receipt_dir }}" download="true">
-                {{ $alert_details[0]->receipt_dir }}
-            </a>
+                <label for="receipt">Receipt:</label>
+            @if(!empty($alert_details[0]->receipt_dir))
+                <img style="width: 100%; max-height: 250PX" src="{{ asset('receipt_uploads/'.$alert_details[0]->receipt_dir) }}" alt="receipt">
+                <div class="form-group">
+                    <a href="{{ asset('/receipt_uploads') }}/{{ $alert_details[0]->receipt_dir }}" download="true">
+                        {{ $alert_details[0]->receipt_dir }}
+                    </a>
+                </div>
+            @else
+                <span style="color: #f44842;">No Receipt uploaded</span>
+            @endif
         </div>
     @else
         <div class="form-group">

@@ -1,3 +1,32 @@
+<script>
+        $('#error_msg').hide();
+        
+        $('#amount_sent').on('keyup', function (){
+            var total = parseInt($('#total').val());
+            var amount_sent = parseInt($('#amount_sent').val());
+    
+            console.log(total);
+            console.log(amount_sent);
+            
+            if(amount_sent < total){
+              $(this).css('border-color', 'red');
+              $('#submit').attr('disabled', true);
+              $('#error_msg').show();
+              $('#error_msg').html('Your amount paid is lower than expected.');
+    
+            }else if(amount_sent >= total){
+              $(this).css('border-color', 'green');
+              $('#submit').attr('disabled', false);
+              $('#error_msg').hide();
+            }else{
+              $(this).css('border-color', 'red');
+              $('#submit').attr('disabled', true);
+              $('#error_msg').show();
+              $('#error_msg').html('Enter the amount sent.');
+            }
+        });
+</script>
+
 <div class="modal-content">
   <div class="modal-header">
       <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -18,21 +47,24 @@
         
               <div class="form-group">
                   <label>Date Sent</label>
-                  <input type="date" class="form-control"  name="date" id="date" format="dd/MM/yyyy" placeholder="dd/mm/yyyy"> 
+                  <input type="date" class="form-control"  name="date" id="date" format="dd/MM/yyyy" placeholder="dd/mm/yyyy" required> 
               </div>
               <div class="form-group">
                   <label>Transfer Details</label>
-                  <input type="text" class="form-control" name="details_no" id="details_no" placeholder="eg:memo/teller_no/transfer-ref_no">
+                  <input type="text" class="form-control" name="details_no" id="details_no" placeholder="eg:memo/teller_no/transfer-ref_no" required>
               </div>
+
+              <input type="hidden" value="{{ $total }}" id="total">
 
               <div class="form-group">
                   <label>Amount Paid</label>
-                  <input type="text" class="form-control" name="amount_paid" id="amount_paid" placeholder="Amount paid">
+                  <input type="text" class="form-control" name="amount_paid" id="amount_sent" placeholder="Amount paid" required>
+                  <span style="margin-top:15px; margin-left:2px;"  class="text-danger" id="error_msg"></span>
               </div>
 
               <div class="form-group">
                   <label>Depositor Name</label>
-                <input type="text" class="form-control" name="depositor_name" id="depositor_name" placeholder="eg:john eze">
+                <input type="text" class="form-control" name="depositor_name" id="depositor_name" placeholder="eg:john eze" required>
               </div>
 
               <input type="hidden" name="purchase_id" value="{{$buy_details->id}}">
@@ -43,7 +75,7 @@
               </div>
 
               <div class="form-group">
-                      <input type="submit" name="confirm_btn" value="submit" class="btn btn-primary">
+                      <input type="submit" name="confirm_btn" id="submit" value="submit" class="btn btn-primary">
               </div>
       </form>
           @else
@@ -66,11 +98,16 @@
                   <label for="depositor_name">Depositor Name:</label>
                   <input type="text" name="depositor_name" value="{{ $bitcoin->depositor_name }}" class="form-control input-lg" readonly="true">
               </div>
+
               <div class="form-group">
-                <label for="image">Receipt Uploaded:</label>
-                <img src="{{ url('/receipt_uploads')}}/{{ $bitcoin->receipt_dir  }}" alt="uploaded receipt" >
-                
+                    <label for="image">Receipt Uploaded:</label>
+                    @if(!empty($bitcoin->receipt_dir))
+                        <img style="width: 100%; max-heigth: 250px;" src="{{ url('/receipt_uploads')}}/{{ $bitcoin->receipt_dir  }}">
+                    @else
+                        <span style="color: #f44842;">No Receipt uploaded</span>
+                    @endif
               </div>
+
           
          
           @endforeach
@@ -132,4 +169,6 @@
 
 </div>
 
-   
+@section('script')
+
+@stop

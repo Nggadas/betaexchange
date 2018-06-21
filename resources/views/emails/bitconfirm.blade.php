@@ -4,8 +4,8 @@
 	<title>Order Confirmation</title>
 </head>
 <body>
-	<p> {!! $user->first_name !!}  {!! $user->middle_name !!} {!! $user->last_name !!}</p>
-	<p>Just Confirmed the {!! $title !!} he/she sold to you, please response </p>
+	<p> Dear {!! $user->first_name !!}, </p>
+	<p>Your {!! $title !!} has been received.</p>
 	
 
 	<p>Confirm order summary:</p>

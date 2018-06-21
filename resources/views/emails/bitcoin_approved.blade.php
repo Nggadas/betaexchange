@@ -18,7 +18,7 @@
 	<div style="color: #006600">
 		<b>BetaExchangeNg</b>
 		<br>
-		<b>Tel: 0909-190-9346, 0803-801-4771.</b>
+		<b>Tel: 0909-190-9346.</b>
 		<br>
 		<b>WhatsApp: 0909-190-9346</b>
 		<br>

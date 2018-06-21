@@ -38,7 +38,9 @@ class NotifyUserController extends Controller
 
     // for loading confirm pm sold
     public function confirm_sold($id) {
-        $data['sold_pm'] = PurchasePerfectMoney::find($id);
+        $perfect_money = PurchasePerfectMoney::find($id);
+        $data['sold_pm'] = $perfect_money;
+        $data['total'] = $perfect_money->total;
         $conf_pmsells = Confirm_sell_pm::where('purchase_perfect_money_id', $id)->get();
         if(empty($conf_pmsells[0])) {
             $a = "Confirm Fund";
@@ -54,7 +56,9 @@ class NotifyUserController extends Controller
     
     // for loading confirm buy pm
      public function Confirm_buypm($id) {
-        $data['pm'] = PerfectMoney::find($id);
+        $perfect_money = PerfectMoney::find($id);
+        $data['pm'] = $perfect_money;
+        $data['total'] = $perfect_money->total;
         $conf_buypm = Confirm_buy_pm::where('perfect_money_id', $id)->get();
         if(empty($conf_buypm[0])) {
             $a = "Confirm Payment";
@@ -71,7 +75,9 @@ class NotifyUserController extends Controller
     //for loading confirm buy bitcoin
     public function confirm_bit($id) {
        
-        $data['buy_details'] = BitCoin::find($id);
+        $bitcoin = BitCoin::find($id);
+        $data['buy_details'] = $bitcoin;
+        $data['total'] = $bitcoin->total;
         $conf_details = Confirm_buy_bitcoins::where('bitcoin_id', $id)->get();
         if (empty($conf_details[0])) {
             $a = "Confirm Payment";
@@ -86,7 +92,9 @@ class NotifyUserController extends Controller
 
     //for loading confirm bitcoin sold
      public function load_confirmbitsell($id) {
-        $data['bitsell'] = PurchaseBitCoin::find($id);
+        $bitcoin = PurchaseBitCoin::find($id);
+        $data['bitsell'] = $bitcoin;
+        $data['total'] = $bitcoin->total;
         $conf_details = Confirm_sell_bitcoin::where('purchase_bitcoins_id', $id)->get();
         if(empty($conf_details[0])) {
             $a = "Confirm Fund";
@@ -141,7 +149,7 @@ class NotifyUserController extends Controller
     //delete the buypm
     public function delete_buy_pm($id){
         $data = PerfectMoney::find($id);
-        $data->status = "cancelled";
+        $data->status = "Canceled";
         $data->save();
       
         return redirect()->back()->with(['message' =>'Successfully Cancelled!']);
@@ -149,7 +157,7 @@ class NotifyUserController extends Controller
 
     public function delete_buy_bit($id) {
         $data = Bitcoin::find($id);
-        $data->status = "cancelled";
+        $data->status = "Canceled";
         $data->save();
 
         return redirect()->back()->with(['message' =>'Successfully Cancelled!']);
@@ -157,7 +165,7 @@ class NotifyUserController extends Controller
 
     public function delete_sold_bit($id) {
         $data = PurchaseBitcoin::find($id);
-        $data->status = "cancelled";
+        $data->status = "Canceled";
         $data->save();
 
         return redirect()->back()->with(['message' =>'Successfully Cancelled!']);

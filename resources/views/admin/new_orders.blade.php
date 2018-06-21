@@ -1,4 +1,4 @@
-`@extends('layouts.admin_master')
+@extends('layouts.admin_master')
 
 @section('content')
 <!--header end here-->

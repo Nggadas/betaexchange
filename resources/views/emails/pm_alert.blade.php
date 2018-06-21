@@ -18,8 +18,6 @@
 		<b>Amount Paid (₦): </b> <em>{!! $amount_paid !!}</em>
 		<br>
 		<b>Depositor Name:</b> <em>{!! $depositor_name !!}</em>
-		<br>
-		<b>Receipt Dir</b> <em>{!! $receipt_dir !!}</em>
 	</div>
 
 	
